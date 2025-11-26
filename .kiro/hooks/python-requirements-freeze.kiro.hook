@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Python Requirements Freeze",
+  "description": "When a Python file is saved, runs 'pip freeze > requirements.txt' to update dependencies, then appends a timestamp comment with \"Skeleton dependencies locked.\"",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.py"
+    ]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "pip freeze > requirements.txt && echo \"# $(date '+%Y-%m-%d %H:%M:%S') - Skeleton dependencies locked.\" >> requirements.txt"
+  }
+}

@@ -1,0 +1,189 @@
+/* ========================================
+   CSS Variables & Theme Definitions
+   ======================================== */
+
+/* Dark Gothic Theme - Ouija Board */
+.theme-dark-gothic {
+    --primary: #8b0000;       /* Deep Blood Red */
+    --secondary: #2b0505;     /* Dried Blood */
+    --accent: #ff3f3f;        /* Bright Red Glow */
+    --bg-main: #050505;       /* Void Black */
+    --bg-card: #110a0a;       /* Dark Card */
+    --bg-input: #000000;      /* Input Black */
+    --text-main: #d4d4d4;     /* Ghostly White */
+    --text-dim: #666;
+    --border: #3a1a1a;
+    
+    background-color: #000;
+    background-image: radial-gradient(circle at 50% 50%, #1a0505 0%, #000000 100%);
+    font-family: 'Georgia', serif;
+    cursor: crosshair;
+}
+
+.theme-dark-gothic button {
+    /* When hovering buttons, show a "grab" hand */
+    cursor: alias; 
+}
+
+.theme-dark-gothic .spooky-title {
+    font-family: 'Creepster', cursive;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px var(--primary), 4px 4px 0px #000;
+    animation: title-pulse 4s infinite ease-in-out;
+}
+
+/* Professional Blue Theme - Legal Eagle */
+.theme-blue-corporate {
+    --primary: #0f172a;       /* Deep Slate Navy (Authority) */
+    --secondary: #334155;     /* Steel Grey (Stability) */
+    --accent: #ca8a04;        /* Muted Gold (Prestige - used sparingly) */
+    --bg-main: #f8fafc;       /* Very Light Grey Background */
+    --bg-card: #ffffff;       /* Crisp White Card */
+    --bg-input: #f1f5f9;      /* Light Grey Input */
+    --text-main: #1e293b;     /* Dark Slate Text */
+    --text-dim: #64748b;      /* Muted Text */
+    --border: #e2e8f0;        /* Subtle Border */
+    
+    background-color: #f1f5f9;
+    /* Use the new professional font */
+    font-family: 'IBM Plex Sans', sans-serif;
+    cursor: default;
+}
+
+.theme-blue-corporate button {
+    cursor: pointer;
+}
+
+/* LEGAL INPUT FIELD POLISH */
+.theme-blue-corporate input[type="text"] {
+    font-family: 'Courier New', monospace; /* Looks like a typewriter/legal doc */
+    letter-spacing: -0.5px;
+}
+
+/* Legal Theme Button Override */
+.theme-blue-corporate .btn-primary {
+    background: var(--primary);
+    border-radius: 4px; /* Sharper corners = more serious */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
+    border: none;
+}
+
+.theme-blue-corporate .btn-primary:hover {
+    background: var(--secondary);
+    transform: translateY(-1px);
+}
+
+/* Legal Chat Bubbles */
+.theme-blue-corporate .chat-message-user {
+    background: var(--primary);
+    border-radius: 4px; /* Boxy */
+    font-weight: 500;
+}
+
+.theme-blue-corporate .chat-message-ai {
+    background: #f8fafc;
+    border-left: 3px solid var(--accent); /* The "Legal Pad" margin look */
+    border-radius: 0 4px 4px 0;
+    font-family: 'Georgia', serif; /* Serif for the AI answer looks like a document */
+}
+
+/* ========================================
+   Common Styles
+   ======================================== */
+
+body {
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    filter: brightness(1.2);
+}
+
+.btn-primary:active {
+    transform: translateY(0px);
+}
+
+/* Chat Bubbles */
+.chat-message {
+    animation: pop-in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.chat-message-user {
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+    color: white;
+}
+
+.chat-message-ai {
+    background: var(--bg-main);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+}
+
+/* ========================================
+   Theme Specific Effects
+   ======================================== */
+
+/* Spooky Effects */
+.ouija-border {
+    border: 1px solid var(--border);
+    box-shadow: 0 0 30px rgba(139, 0, 0, 0.15), inset 0 0 50px rgba(0,0,0,0.8);
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23220000' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+@keyframes title-pulse {
+    0%, 100% { text-shadow: 0 0 10px var(--primary), 2px 2px 0px #000; opacity: 1; }
+    50% { text-shadow: 0 0 20px var(--accent), 2px 2px 0px #000; opacity: 0.9; }
+}
+
+/* Legal Effects */
+.legal-border {
+    border: 1px solid #cbd5e1;
+    border-top: 4px solid var(--primary);
+    /* Subtle grid pattern background for the card */
+    background-image: 
+        linear-gradient(#e2e8f0 1px, transparent 1px),
+        linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: center center;
+}
+
+.professional-shadow {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Animations */
+@keyframes pop-in {
+    0% { opacity: 0; transform: translateY(10px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-fade-in {
+    animation: pop-in 0.8s ease-out forwards;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.1); 
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border); 
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-dim); 
+}

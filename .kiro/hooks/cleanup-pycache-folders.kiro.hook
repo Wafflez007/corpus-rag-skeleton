@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Clean __pycache__ on Session End",
+  "description": "Scans the directory for '__pycache__' folders and deletes them to keep the skeleton clean when the user finishes working. Logs a message: \"🧹 Bone structure polished. Cache cleared.\"",
+  "version": "1",
+  "when": {
+    "type": "agentEnd"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "find . -type d -name \"__pycache__\" -exec rm -rf {} + 2>/dev/null; echo \"🧹 Bone structure polished. Cache cleared.\""
+  }
+}

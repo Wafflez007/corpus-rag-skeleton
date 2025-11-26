@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Python Syntax & Import Checker",
+  "description": "Analyzes saved Python files for syntax errors and unused imports. Creates WARNING.txt with error details if issues are found, or deletes it if the file is clean.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.py"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the Python file that was just saved for:\n1. Syntax errors (try to compile/parse the file)\n2. Unused imports (imports that are defined but never used in the code)\n\nIf you find ANY errors or unused imports:\n- Create a file named 'WARNING.txt' in the root directory\n- The content should be: \"👻 ECTOPLASM DETECTED: [List of Errors]\"\n- Replace [List of Errors] with a clear list of all issues found (syntax errors and/or unused imports)\n\nIf NO errors or unused imports are found:\n- Delete 'WARNING.txt' if it exists in the root directory\n- Confirm the file is clean\n\nBe thorough and check the actual file content carefully."
+  }
+}
