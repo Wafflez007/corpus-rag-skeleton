@@ -1,23 +1,46 @@
 # Project Corpus - RAG Skeleton
 
-A configurable RAG (Retrieval Augmented Generation) web application that lets you chat with uploaded documents. The unique "skeleton + apps" architecture allows multiple AI personalities and themes to share the same core logic.
+A polished, production-ready RAG (Retrieval Augmented Generation) web application that lets you chat with uploaded documents. The unique "skeleton + apps" architecture allows multiple AI personalities and themes to share the same core logic.
 
-## Features
+## ✨ Key Features
 
-- 📄 Upload and chat with text/PDF documents
-- 🔍 Vector-based semantic search using ChromaDB
-- 🎭 Multiple AI personalities (Legal Eagle, Ouija Board, and more)
-- 🎨 Theme-based UI customization
-- 📑 Page-aware document chunking with source tracking
-- 🤖 Powered by Google Gemini AI
+### Core Functionality
+- � **Multib-format document support** - Upload and chat with text/PDF documents
+- 🔍 **Semantic search** - Vector-based retrieval using ChromaDB with Gemini embeddings
+- � T**Smart source attribution** - Relevance-filtered citations showing only documents that actually contain answers
+- 📑 **Page-aware chunking** - Track exact page numbers for precise source references
+- 📚 **Document library** - Manage multiple documents with selective filtering
 
-## Available Apps
+### User Experience
+- 🎭 **Multiple AI personalities** - Legal Eagle (professional), Ouija Board (mystical), and extensible
+- 🎨 **Theme-based UI** - Fully customized styling per personality with smooth animations
+- ⚡ **Real-time progress tracking** - SSE-based upload progress with stage indicators
+- 📤 **Sequential upload queue** - Handles multiple file uploads gracefully
+- ✅ **Comprehensive validation** - File type, size, and content validation with user-friendly errors
+- 🎵 **Ambient audio** - Theme-appropriate sound effects (Ghost: ambient drone, Legal: typewriter)
+- ♿ **Accessibility** - ARIA labels, screen reader support, keyboard navigation
+
+### Developer Experience
+- 🏗️ **Modular architecture** - Reusable core with config-based app modes
+- 🧪 **Comprehensive test suite** - Property-based testing for UI components
+- 🎨 **CSS custom properties** - Theme variables for easy customization
+- 📱 **Responsive design** - Mobile-friendly with adaptive layouts
+
+## 🎭 Available Personalities
 
 ### Legal Eagle ⚖️ (Port 5000)
 Professional legal document analysis with formal, precise responses.
+- **Theme**: Blue corporate styling with legal icons
+- **Personality**: Formal, analytical, citation-focused
+- **Audio**: Typewriter sound effects
+- **Use case**: Legal research, contract analysis, professional documentation
 
 ### Ghost/Ouija Board 👻 (Port 5001)
 Mystical, spooky interactions with your documents from beyond the veil.
+- **Theme**: Dark gothic with blood drip animations
+- **Personality**: Cryptic, mystical, dramatic
+- **Audio**: Ambient drone with static glitch effects
+- **Use case**: Creative writing, atmospheric document exploration
 
 ## Installation
 
@@ -46,9 +69,11 @@ pip install -r requirements.txt
 GOOGLE_API_KEY=your_api_key_here
 ```
 
-## Usage
+## 🚀 Usage
 
-Run either app mode:
+### Running the Application
+
+Start either personality mode:
 
 ```bash
 # Legal Eagle (port 5000)
@@ -59,6 +84,32 @@ python app_ghost/main.py
 ```
 
 Then open your browser to `http://localhost:5000` or `http://localhost:5001`
+
+### Using the Interface
+
+1. **Upload Documents**
+   - Click "Choose File" and select a `.txt` or `.pdf` file (max 10MB)
+   - Click "UPLOAD" to process the document
+   - Watch real-time progress as pages are parsed and vectorized
+   - Multiple files can be queued for sequential processing
+
+2. **Manage Document Library**
+   - View all uploaded documents in the left sidebar
+   - Select/deselect documents to filter which ones are searched
+   - Use "Select All" checkbox for quick selection
+   - Delete documents with the trash icon
+
+3. **Chat with Documents**
+   - Type your question in the chat input
+   - Press Enter or click "SEND" to submit
+   - AI responds with context from selected documents
+   - Source citations show which documents and pages were referenced
+   - Only documents containing relevant information are cited
+
+4. **Audio Controls**
+   - Click the speaker icon (bottom-right) to toggle sound
+   - Ghost mode: ambient background drone + response effects
+   - Legal mode: typewriter sound on AI responses
 
 ## Architecture
 
@@ -73,21 +124,141 @@ app_legal/          # Legal Eagle configuration
 app_ghost/          # Ghost/Ouija configuration
 ```
 
-## Creating New App Modes
+### Smart Source Attribution
 
-1. Create a new folder: `app_yourname/`
-2. Add `config.py` with `Config` class (APP_NAME, THEME_CSS, SYSTEM_PROMPT)
-3. Add `main.py` entry point with unique port
-4. Add `__init__.py`
+The system uses relevance-based filtering to ensure accurate source citations:
+- Vector search retrieves the top 3 most relevant document chunks
+- Results are filtered by similarity threshold (within 0.3 distance units of best match)
+- Only documents that actually contain relevant information are shown in citations
+- Each citation includes the specific page numbers where information was found
 
-## Tech Stack
+### Document Processing Pipeline
 
+1. **File Upload** → SSE progress streaming with stage updates
+2. **Page Extraction** → PDF pages or text file parsed individually
+3. **Chunking** → 500 character chunks with 50 character overlap
+4. **Embedding** → Gemini `text-embedding-004` with task-specific types
+5. **Storage** → ChromaDB with metadata (source, page, chunk_index)
+
+### Chat Query Flow
+
+1. **User Query** → Optional document filtering via library selection
+2. **Vector Search** → Semantic similarity search in ChromaDB
+3. **Relevance Filter** → Distance-based threshold filtering
+4. **Context Assembly** → Top chunks combined for AI prompt
+5. **AI Generation** → Gemini Flash with personality-specific system prompt
+6. **Response Display** → Typewriter effect with source citations
+
+## 🛠️ Creating New Personalities
+
+The skeleton architecture makes it easy to add new AI personalities:
+
+1. **Create app folder**: `app_yourname/`
+2. **Add `config.py`**:
+   ```python
+   class Config:
+       APP_NAME = "Your App Name 🎯"
+       THEME_CSS = "your-theme-class"
+       SYSTEM_PROMPT = """
+       Your personality instructions here.
+       Define tone, style, and behavior.
+       """
+   ```
+3. **Add `main.py`**:
+   ```python
+   import sys
+   import os
+   sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+   
+   from dotenv import load_dotenv
+   load_dotenv()
+   
+   from skeleton_core.app import create_app
+   from .config import Config
+   
+   if __name__ == '__main__':
+       app = create_app(Config)
+       app.run(debug=True, port=5002)  # Use unique port
+   ```
+4. **Add `__init__.py`** (empty file for package structure)
+5. **Customize CSS** in `skeleton_core/static/styles.css`:
+   ```css
+   .theme-your-theme-class {
+       --primary: #your-color;
+       --accent: #your-accent;
+       /* ... other variables */
+   }
+   ```
+6. **Optional**: Add custom audio files to `skeleton_core/static/sounds/`
+
+## 🧪 Testing
+
+The project includes comprehensive property-based tests using Hypothesis:
+
+```bash
+# Run all tests
+pytest tests/
+
+# Run specific test file
+pytest tests/test_animations.py
+
+# Run with verbose output
+pytest -v tests/
+```
+
+**Test Coverage:**
+- UI animations and transitions
+- Auto-scroll behavior
+- CSS property validation
+- Enter key submission
+- Error display and handling
+- File validation (type, size, content)
+- Loading indicators
+- Message display and formatting
+- Sequential upload queue
+- Upload progress tracking
+- Success/error feedback
+
+## 📚 Tech Stack
+
+**Backend:**
 - Python 3.10+
-- Flask 3.0.0
-- ChromaDB 0.5.0
-- Google Gemini API
-- PyPDF2 for PDF processing
+- Flask 3.0.0 - Web framework with Jinja2 templating
+- ChromaDB 0.5.0 - Vector database with cosine similarity
+- Google Gemini API - AI generation (`gemini-1.5-flash`) and embeddings (`text-embedding-004`)
+- PyPDF2 3.0.0 - PDF text extraction
+- python-dotenv 1.0.0 - Environment variable management
 
-## License
+**Frontend:**
+- Vanilla JavaScript - No framework dependencies
+- Tailwind CSS (CDN) - Utility-first styling
+- CSS Custom Properties - Theme variables
+- Server-Sent Events (SSE) - Real-time upload progress
+- Web Audio API - Sound effects
+
+**Testing:**
+- pytest - Test framework
+- Hypothesis - Property-based testing
+
+## 🎯 Project Highlights
+
+- **Production-ready UI** with polished animations, error handling, and accessibility
+- **Robust upload system** with validation, progress tracking, and queue management
+- **Smart RAG pipeline** with relevance filtering and accurate source attribution
+- **Extensible architecture** - add new personalities without touching core code
+- **Comprehensive testing** - property-based tests ensure UI reliability
+- **Theme system** - CSS variables enable complete visual customization
+- **Audio integration** - personality-specific sound design
+
+## 📝 License
 
 MIT
+
+## 🤝 Contributing
+
+Contributions welcome! Areas for expansion:
+- New personality modes (Detective, Scientist, Poet, etc.)
+- Additional document formats (DOCX, Markdown, HTML)
+- Advanced RAG features (multi-query, re-ranking, citations in text)
+- UI enhancements (dark mode toggle, custom themes, mobile gestures)
+- Deployment guides (Docker, cloud platforms)
