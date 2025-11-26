@@ -338,10 +338,16 @@ async function sendQuery() {
     const loadingId = showLoading();
 
     try {
+        // Get selected document sources for filtering
+        const selectedSources = getSelectedSources();
+        
         const response = await fetch('/chat', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({
+                query: query,
+                sources: selectedSources
+            })
         });
         const result = await response.json();
         
@@ -492,6 +498,9 @@ function addMessage(text, type) {
     chatHistory.appendChild(div);
     
     if (type === 'ai') {
+        // Play response sound when AI starts answering
+        audioManager.playResponseSound();
+        
         // Determine speed based on theme (Ghost = Slow, Legal = Fast)
         const isGhost = document.body.classList.contains('theme-dark-gothic');
         const speed = isGhost ? 50 : 10; 
@@ -527,6 +536,9 @@ function addMessage(text, type) {
                 const jitter = isGhost ? Math.random() * 50 : 0;
                 setTimeout(typeWriter, speed + jitter);
                 scrollToBottom();
+            } else {
+                // Typing complete - stop the response sound
+                audioManager.stopResponseSound();
             }
         }
         typeWriter();
@@ -1066,7 +1078,143 @@ function getThemeText(ghostText, legalText) {
 }
 
 // ==========================================
-// 11. INITIALIZATION
+// 11. AUDIO MANAGEMENT
+// ==========================================
+
+/**
+ * Audio manager for handling background ambience and response sounds
+ * Implements browser autoplay policy compliance and mute controls
+ * @namespace
+ */
+const audioManager = {
+    /** @type {HTMLAudioElement|null} Background audio element (Ghost mode only) */
+    bgAudio: null,
+    
+    /** @type {HTMLAudioElement|null} Response sound effect element */
+    responseAudio: null,
+    
+    /** @type {HTMLButtonElement|null} Mute toggle button */
+    soundToggle: null,
+    
+    /** @type {boolean} Whether audio is currently muted */
+    isMuted: false,
+    
+    /** @type {boolean} Whether background audio has been started */
+    bgStarted: false,
+    
+    /**
+     * Initializes the audio system
+     * Sets up audio elements and event listeners
+     */
+    init() {
+        this.bgAudio = document.getElementById('bg-audio');
+        this.responseAudio = document.getElementById('response-audio');
+        this.soundToggle = document.getElementById('sound-toggle');
+        
+        if (!this.soundToggle) return;
+        
+        // Set up mute toggle button
+        this.soundToggle.addEventListener('click', () => {
+            this.toggleMute();
+        });
+        
+        // Auto-start Ghost ambience on first user interaction
+        // (Browsers block autoplay until user interacts with the page)
+        if (this.bgAudio) {
+            const startAmbience = () => {
+                if (!this.bgStarted && !this.isMuted) {
+                    this.startBackgroundAudio();
+                }
+            };
+            
+            // Listen for first click or keypress
+            document.addEventListener('click', startAmbience, { once: true });
+            document.addEventListener('keypress', startAmbience, { once: true });
+        }
+    },
+    
+    /**
+     * Starts background audio (Ghost mode only)
+     * Handles browser autoplay restrictions gracefully
+     */
+    startBackgroundAudio() {
+        if (!this.bgAudio || this.bgStarted) return;
+        
+        this.bgAudio.volume = 0.3; // Keep it subtle
+        this.bgAudio.play()
+            .then(() => {
+                this.bgStarted = true;
+                console.log('Background ambience started');
+            })
+            .catch(e => {
+                console.log('Audio waiting for user interaction:', e.message);
+            });
+    },
+    
+    /**
+     * Plays the response sound effect with looping
+     * Called when AI starts responding
+     * The sound will loop continuously until stopResponseSound() is called
+     */
+    playResponseSound() {
+        if (!this.responseAudio || this.isMuted) return;
+        
+        this.responseAudio.currentTime = 0; // Reset to start
+        this.responseAudio.volume = 0.5;
+        this.responseAudio.loop = true; // Enable looping
+        this.responseAudio.play()
+            .catch(e => {
+                console.log('Response sound failed:', e.message);
+            });
+    },
+    
+    /**
+     * Stops the response sound effect immediately
+     * Called when AI finishes typing
+     */
+    stopResponseSound() {
+        if (!this.responseAudio) return;
+        
+        this.responseAudio.pause();
+        this.responseAudio.currentTime = 0; // Reset to start for next time
+        this.responseAudio.loop = false; // Disable looping
+    },
+    
+    /**
+     * Toggles mute state for all audio
+     * Updates button icon and pauses/resumes audio
+     */
+    toggleMute() {
+        this.isMuted = !this.isMuted;
+        
+        // Update button icon
+        if (this.soundToggle) {
+            this.soundToggle.innerText = this.isMuted ? '🔇' : '🔊';
+            this.soundToggle.setAttribute('aria-label', 
+                this.isMuted ? 'Unmute sound' : 'Mute sound');
+        }
+        
+        // Handle background audio
+        if (this.bgAudio) {
+            if (this.isMuted) {
+                this.bgAudio.pause();
+            } else {
+                this.startBackgroundAudio();
+            }
+        }
+    },
+    
+    /**
+     * Checks if audio is available and not muted
+     * @returns {boolean} True if audio can be played
+     */
+    isAudioEnabled() {
+        return !this.isMuted && (this.bgAudio !== null || this.responseAudio !== null);
+    }
+};
+
+// ==========================================
+// 12. INITIALIZATION
 // ==========================================
 
 /**
@@ -1076,6 +1224,12 @@ function getThemeText(ghostText, legalText) {
 function initializeApp() {
     // Set up Enter key submission for chat
     setupEnterKeySubmission();
+    
+    // Initialize audio system
+    audioManager.init();
+    
+    // Load document library
+    refreshDocuments();
     
     // Add any other initialization code here
     console.log('Skeleton Crew initialized');
@@ -1087,4 +1241,403 @@ if (document.readyState === 'loading') {
 } else {
     // DOM already loaded
     initializeApp();
+}
+
+// ==========================================
+// 13. DOCUMENT LIBRARY MANAGEMENT
+// ==========================================
+
+/**
+ * Fetches and displays the list of uploaded documents
+ * Shows document name, page count, and chunk count with selection checkboxes
+ */
+async function refreshDocuments() {
+    const documentList = document.getElementById('document-list');
+    if (!documentList) return;
+    
+    const isGhost = document.body.classList.contains('theme-dark-gothic');
+    
+    try {
+        const response = await fetch('/documents');
+        const data = await response.json();
+        
+        if (!data.documents || data.documents.length === 0) {
+            documentList.innerHTML = `
+                <div class="text-center text-xs opacity-40 py-4">
+                    ${isGhost ? 'No spirits bound yet...' : 'No documents uploaded yet'}
+                </div>
+            `;
+            updateSelectionCount();
+            return;
+        }
+        
+        // Build document list with checkboxes
+        let html = '';
+        data.documents.forEach(doc => {
+            const pageText = doc.pages === 1 ? 'page' : 'pages';
+            const chunkText = doc.chunks === 1 ? 'chunk' : 'chunks';
+            
+            html += `
+                <div class="document-item flex items-center gap-3 p-2 rounded hover:bg-opacity-50 transition-all" 
+                     style="background: var(--bg-card);">
+                    <input type="checkbox" 
+                           class="doc-checkbox cursor-pointer" 
+                           data-source="${escapeHtml(doc.source)}"
+                           onchange="updateSelectionCount()"
+                           checked>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-semibold truncate" title="${escapeHtml(doc.source)}">
+                            ${isGhost ? '📜' : '📄'} ${escapeHtml(doc.source)}
+                        </div>
+                        <div class="text-xs opacity-60">
+                            ${doc.pages} ${pageText} • ${doc.chunks} ${chunkText}
+                        </div>
+                    </div>
+                    <button onclick="deleteDocument('${escapeHtml(doc.source)}')" 
+                            class="text-xs px-2 py-1 rounded opacity-60 hover:opacity-100 transition-opacity"
+                            style="color: #ef4444;"
+                            title="Delete document">
+                        🗑️
+                    </button>
+                </div>
+            `;
+        });
+        
+        documentList.innerHTML = html;
+        updateSelectionCount();
+        
+    } catch (e) {
+        console.error('Failed to load documents:', e);
+        documentList.innerHTML = `
+            <div class="text-center text-xs text-red-500 py-4">
+                ${isGhost ? 'The spirits refuse to manifest...' : 'Failed to load documents'}
+            </div>
+        `;
+    }
+}
+
+/**
+ * Deletes a document from the database
+ * @param {string} source - The document source identifier
+ */
+async function deleteDocument(source) {
+    const isGhost = document.body.classList.contains('theme-dark-gothic');
+    
+    const title = isGhost ? 'Banish Document?' : 'Delete Document?';
+    const message = isGhost
+        ? `Banish "${source}" from the void? This cannot be undone.`
+        : `Delete "${source}"? This action cannot be undone.`;
+    const confirmText = isGhost ? 'Banish' : 'Delete';
+    
+    showConfirmDialog({
+        title,
+        message,
+        confirmText,
+        cancelText: 'Cancel',
+        dangerous: true,
+        onConfirm: async () => {
+            try {
+                const response = await fetch(`/documents/${encodeURIComponent(source)}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Refresh the document list
+                    await refreshDocuments();
+                    
+                    // Show success message
+                    const successMsg = isGhost
+                        ? `${source} has been banished. ${result.deleted_chunks} fragments erased.`
+                        : `${source} deleted successfully. ${result.deleted_chunks} chunks removed.`;
+                    
+                    addSystemMessage(successMsg);
+                } else {
+                    throw new Error(result.error || 'Delete failed');
+                }
+                
+            } catch (e) {
+                console.error('Delete failed:', e);
+                const errorMsg = isGhost
+                    ? 'The spirits resist banishment...'
+                    : 'Failed to delete document';
+                showChatError(errorMsg);
+            }
+        }
+    });
+}
+
+/**
+ * Toggles all document checkboxes
+ */
+function toggleAllDocuments() {
+    const selectAll = document.getElementById('select-all-docs');
+    const checkboxes = document.querySelectorAll('.doc-checkbox');
+    
+    checkboxes.forEach(cb => {
+        cb.checked = selectAll.checked;
+    });
+    
+    updateSelectionCount();
+}
+
+/**
+ * Updates the selection count display
+ */
+function updateSelectionCount() {
+    const checkboxes = document.querySelectorAll('.doc-checkbox');
+    const checked = document.querySelectorAll('.doc-checkbox:checked');
+    const countDisplay = document.getElementById('selection-count');
+    const selectAll = document.getElementById('select-all-docs');
+    
+    if (countDisplay) {
+        countDisplay.textContent = `${checked.length} selected`;
+    }
+    
+    // Update "select all" checkbox state
+    if (selectAll) {
+        selectAll.checked = checkboxes.length > 0 && checked.length === checkboxes.length;
+        selectAll.indeterminate = checked.length > 0 && checked.length < checkboxes.length;
+    }
+}
+
+/**
+ * Gets the list of selected document sources
+ * @returns {string[]|null} Array of selected sources, or null if all are selected
+ */
+function getSelectedSources() {
+    const checkboxes = document.querySelectorAll('.doc-checkbox');
+    const checked = document.querySelectorAll('.doc-checkbox:checked');
+    
+    // If all are selected, return null (no filter)
+    if (checked.length === checkboxes.length) {
+        return null;
+    }
+    
+    // Return array of selected sources
+    return Array.from(checked).map(cb => cb.dataset.source);
+}
+
+// ==========================================
+// 14. CUSTOM MODAL DIALOG SYSTEM
+// ==========================================
+
+/**
+ * Shows a custom confirmation dialog with theme-appropriate styling
+ * @param {Object} options - Configuration options
+ * @param {string} options.title - Dialog title
+ * @param {string} options.message - Dialog message
+ * @param {string} options.confirmText - Text for confirm button (default: "Confirm")
+ * @param {string} options.cancelText - Text for cancel button (default: "Cancel")
+ * @param {Function} options.onConfirm - Callback when confirmed
+ * @param {Function} options.onCancel - Callback when cancelled (optional)
+ * @param {boolean} options.dangerous - Whether this is a dangerous action (red styling)
+ */
+function showConfirmDialog(options) {
+    const {
+        title = 'Confirm Action',
+        message = 'Are you sure?',
+        confirmText = 'Confirm',
+        cancelText = 'Cancel',
+        onConfirm = () => {},
+        onCancel = () => {},
+        dangerous = false
+    } = options;
+    
+    const isGhost = document.body.classList.contains('theme-dark-gothic');
+    
+    // Create modal overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        animation: fadeIn 0.2s ease-out;
+    `;
+    
+    // Create modal dialog
+    const modal = document.createElement('div');
+    modal.className = 'modal-dialog';
+    modal.style.cssText = `
+        background: var(--bg-card);
+        border: 2px solid ${dangerous ? '#ef4444' : 'var(--border)'};
+        border-radius: 12px;
+        padding: 24px;
+        max-width: 450px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        animation: slideUp 0.3s ease-out;
+        position: relative;
+    `;
+    
+    // Add glow effect for ghost theme
+    if (isGhost) {
+        modal.style.boxShadow = `0 0 40px ${dangerous ? 'rgba(139, 0, 0, 0.5)' : 'rgba(139, 0, 0, 0.3)'}, 0 20px 60px rgba(0, 0, 0, 0.5)`;
+    }
+    
+    // Icon based on theme and danger level
+    let icon = '❓';
+    if (dangerous) {
+        icon = isGhost ? '💀' : '⚠️';
+    } else {
+        icon = isGhost ? '🔮' : '📋';
+    }
+    
+    // Build modal content
+    modal.innerHTML = `
+        <div class="modal-header" style="margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 32px;">${icon}</span>
+                <h3 style="font-size: 20px; font-weight: bold; color: ${dangerous ? '#ef4444' : 'var(--primary)'}; margin: 0;">
+                    ${escapeHtml(title)}
+                </h3>
+            </div>
+        </div>
+        <div class="modal-body" style="margin-bottom: 24px;">
+            <p style="color: var(--text-main); line-height: 1.6; margin: 0;">
+                ${escapeHtml(message)}
+            </p>
+        </div>
+        <div class="modal-footer" style="display: flex; gap: 12px; justify-content: flex-end;">
+            <button class="modal-btn-cancel" style="
+                padding: 10px 24px;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+                background: var(--bg-input);
+                color: var(--text-main);
+                border: 1px solid var(--border);
+            ">
+                ${escapeHtml(cancelText)}
+            </button>
+            <button class="modal-btn-confirm" style="
+                padding: 10px 24px;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+                background: ${dangerous ? '#ef4444' : 'var(--accent)'};
+                color: white;
+                border: none;
+                box-shadow: 0 2px 8px ${dangerous ? 'rgba(239, 68, 68, 0.3)' : 'rgba(0, 0, 0, 0.2)'};
+            ">
+                ${escapeHtml(confirmText)}
+            </button>
+        </div>
+    `;
+    
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    
+
+    // Get buttons
+    const confirmBtn = modal.querySelector('.modal-btn-confirm');
+    const cancelBtn = modal.querySelector('.modal-btn-cancel');
+    
+    // Add hover effects
+    confirmBtn.addEventListener('mouseenter', () => {
+        confirmBtn.style.transform = 'translateY(-2px)';
+        confirmBtn.style.boxShadow = `0 4px 12px ${dangerous ? 'rgba(239, 68, 68, 0.4)' : 'rgba(0, 0, 0, 0.3)'}`;
+    });
+    confirmBtn.addEventListener('mouseleave', () => {
+        confirmBtn.style.transform = 'translateY(0)';
+        confirmBtn.style.boxShadow = `0 2px 8px ${dangerous ? 'rgba(239, 68, 68, 0.3)' : 'rgba(0, 0, 0, 0.2)'}`;
+    });
+    
+    cancelBtn.addEventListener('mouseenter', () => {
+        cancelBtn.style.background = 'var(--bg-card)';
+        cancelBtn.style.transform = 'translateY(-2px)';
+    });
+    cancelBtn.addEventListener('mouseleave', () => {
+        cancelBtn.style.background = 'var(--bg-input)';
+        cancelBtn.style.transform = 'translateY(0)';
+    });
+    
+    // Handle confirm
+    confirmBtn.addEventListener('click', () => {
+        closeModal();
+        onConfirm();
+    });
+    
+    // Handle cancel
+    cancelBtn.addEventListener('click', () => {
+        closeModal();
+        onCancel();
+    });
+    
+    // Close on overlay click
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closeModal();
+            onCancel();
+        }
+    });
+    
+    // Close on Escape key
+    const escapeHandler = (e) => {
+        if (e.key === 'Escape') {
+            closeModal();
+            onCancel();
+        }
+    };
+    document.addEventListener('keydown', escapeHandler);
+    
+    // Close modal function
+    function closeModal() {
+        document.removeEventListener('keydown', escapeHandler);
+        overlay.style.animation = 'fadeOut 0.2s ease-out';
+        modal.style.animation = 'slideDown 0.2s ease-out';
+        setTimeout(() => {
+            if (overlay.parentNode) {
+                overlay.remove();
+            }
+        }, 200);
+    }
+    
+    // Focus confirm button for keyboard accessibility
+    setTimeout(() => confirmBtn.focus(), 100);
+}
+
+/**
+ * Shows a simple alert dialog (non-blocking, prettier than window.alert)
+ * @param {Object} options - Configuration options
+ * @param {string} options.title - Dialog title
+ * @param {string} options.message - Dialog message
+ * @param {string} options.buttonText - Text for OK button (default: "OK")
+ * @param {Function} options.onClose - Callback when closed (optional)
+ */
+function showAlertDialog(options) {
+    const {
+        title = 'Notice',
+        message = '',
+        buttonText = 'OK',
+        onClose = () => {}
+    } = options;
+    
+    showConfirmDialog({
+        title,
+        message,
+        confirmText: buttonText,
+        cancelText: null,
+        onConfirm: onClose,
+        dangerous: false
+    });
+    
+    // Hide cancel button for alert
+    const modal = document.querySelector('.modal-dialog');
+    const cancelBtn = modal?.querySelector('.modal-btn-cancel');
+    if (cancelBtn) {
+        cancelBtn.style.display = 'none';
+    }
 }

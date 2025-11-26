@@ -125,13 +125,14 @@ class VectorStore:
         
         return len(ids)
     
-    def search(self, query: str, n_results: int = 3) -> List[Dict[str, Any]]:
+    def search(self, query: str, n_results: int = 3, filter_sources: List[str] = None) -> List[Dict[str, Any]]:
         """
         Search for relevant chunks using semantic similarity.
         
         Args:
             query: Search query
             n_results: Number of results to return
+            filter_sources: Optional list of document sources to filter by
             
         Returns:
             List of matching chunks with metadata
@@ -144,9 +145,15 @@ class VectorStore:
         )
         query_embedding = result['embedding']
         
+        # Build where filter if sources specified
+        where_filter = None
+        if filter_sources:
+            where_filter = {"source": {"$in": filter_sources}}
+        
         results = self.collection.query(
             query_embeddings=[query_embedding],
-            n_results=n_results
+            n_results=n_results,
+            where=where_filter
         )
         
         # Format results
@@ -160,3 +167,61 @@ class VectorStore:
                 })
         
         return matches
+    
+    def list_documents(self) -> List[Dict[str, Any]]:
+        """
+        List all unique documents in the collection.
+        
+        Returns:
+            List of documents with metadata (source, page count, chunk count)
+        """
+        # Get all items from collection
+        all_items = self.collection.get()
+        
+        if not all_items['metadatas']:
+            return []
+        
+        # Group by source
+        docs = {}
+        for metadata in all_items['metadatas']:
+            source = metadata.get('source', 'unknown')
+            if source not in docs:
+                docs[source] = {
+                    'source': source,
+                    'pages': set(),
+                    'chunks': 0
+                }
+            docs[source]['pages'].add(metadata.get('page', 1))
+            docs[source]['chunks'] += 1
+        
+        # Convert to list format
+        result = []
+        for doc in docs.values():
+            result.append({
+                'source': doc['source'],
+                'pages': len(doc['pages']),
+                'chunks': doc['chunks']
+            })
+        
+        return sorted(result, key=lambda x: x['source'])
+    
+    def delete_document(self, source: str) -> int:
+        """
+        Delete all chunks for a specific document.
+        
+        Args:
+            source: Document source identifier
+            
+        Returns:
+            Number of chunks deleted
+        """
+        # Get all IDs for this source
+        results = self.collection.get(
+            where={"source": source}
+        )
+        
+        if results['ids']:
+            self.collection.delete(ids=results['ids'])
+            return len(results['ids'])
+        
+        return 0

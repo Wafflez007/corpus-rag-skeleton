@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>{{ app_name }}</title>
+    <!-- Favicon -->
+    {% if theme == 'dark-gothic' %}
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon-ghost.svg') }}">
+    {% else %}
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon-legal.svg') }}">
+    {% endif %}
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: 'Creepster' for Ghost, 'Playfair Display' for Lawyer -->
@@ -83,7 +89,7 @@
     {% endif %}
 
     <!-- Header -->
-    <header class="w-full max-w-3xl text-center mb-8 animate-fade-in">
+    <header class="w-full max-w-7xl text-center mb-8 animate-fade-in">
         {% if theme == 'dark-gothic' %}
         <h1 class="text-6xl mb-3 spooky-title" style="color: var(--accent);">
             {{ app_name }}
@@ -99,12 +105,12 @@
     </header>
 
     <!-- Main Container -->
-    <main class="w-full max-w-3xl rounded-xl p-8 backdrop-blur-sm transition-all duration-500 animate-fade-in
-                 {% if theme == 'dark-gothic' %}ouija-border{% else %}legal-border professional-shadow{% endif %}" 
-          style="background-color: var(--bg-card); color: var(--text-main); animation-delay: 0.2s; opacity: 0;">
+    <main class="w-full max-w-7xl backdrop-blur-sm transition-all duration-500 animate-fade-in" 
+          style="animation-delay: 0.2s; opacity: 0;">
         
-        <!-- Upload Section -->
-        <div id="upload-section" class="mb-8 pb-6" style="border-bottom: 1px solid var(--border);">
+        <!-- Upload Section (Full Width) -->
+        <div id="upload-section" class="mb-6 rounded-xl p-6 {% if theme == 'dark-gothic' %}ouija-border{% else %}legal-border professional-shadow{% endif %}" 
+             style="background-color: var(--bg-card); color: var(--text-main);">
             <h2 class="text-xl font-bold mb-4 flex items-center gap-3" style="color: var(--primary);">
                 {% if theme == 'dark-gothic' %}
                 <span class="animate-pulse">🔮</span> Summon Document
@@ -134,44 +140,85 @@
             <div id="queue-status" style="display: none;"></div>
         </div>
 
-        <!-- Chat Section -->
-        <div id="chat-section" class="relative">
-            <h2 class="text-xl font-bold mb-4 flex items-center gap-3" style="color: var(--primary);">
-                {% if theme == 'dark-gothic' %}
-                <span class="animate-pulse">💀</span> Commune with the Entity
-                {% else %}
-                <span>💬</span> Counsel Inquiry
-                {% endif %}
-            </h2>
+        <!-- Two Column Layout: Document Library (Left) + Chat (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            <div id="chat-history" class="h-96 overflow-y-auto mb-4 p-5 rounded-lg space-y-4 scroll-smooth" 
-                 style="background: var(--bg-input); border: 1px solid var(--border);">
-                <div class="text-center text-xs uppercase tracking-widest opacity-40 pt-32">
-                    {% if theme == 'dark-gothic' %}
-                    ... The void is listening ...
-                    {% else %}
-                    System Ready. Awaiting Input.
-                    {% endif %}
+            <!-- Left Column: Document Library -->
+            <div id="library-section" class="lg:col-span-1">
+                <div class="rounded-xl p-6 h-full {% if theme == 'dark-gothic' %}ouija-border{% else %}legal-border professional-shadow{% endif %}" 
+                     style="background-color: var(--bg-card); color: var(--text-main);">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold flex items-center gap-2" style="color: var(--primary);">
+                            {% if theme == 'dark-gothic' %}
+                            <span>📚</span> Summoned Texts
+                            {% else %}
+                            <span>📚</span> Library
+                            {% endif %}
+                        </h2>
+                        <button onclick="refreshDocuments()" class="text-xs px-2 py-1 rounded opacity-60 hover:opacity-100 transition-opacity" style="background: var(--bg-input);" title="Refresh document list">
+                            🔄
+                        </button>
+                    </div>
+                    <div id="document-list" class="space-y-2 max-h-[500px] overflow-y-auto rounded-lg p-3 mb-3" style="background: var(--bg-input); border: 1px solid var(--border);">
+                        <div class="text-center text-xs opacity-40 py-8">
+                            {% if theme == 'dark-gothic' %}
+                            No spirits bound yet...
+                            {% else %}
+                            No documents uploaded yet
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs opacity-60">
+                        <input type="checkbox" id="select-all-docs" onchange="toggleAllDocuments()" class="cursor-pointer">
+                        <label for="select-all-docs" class="cursor-pointer">Select All</label>
+                        <span class="ml-auto" id="selection-count">0 selected</span>
+                    </div>
                 </div>
             </div>
-            
-            <div class="flex gap-3">
-                <input type="text" id="queryInput" 
-                    placeholder="{% if theme == 'dark-gothic' %}Ask the spirit...{% else %}Enter your query here...{% endif %}" 
-                    class="w-full p-4 rounded-lg outline-none transition-all shadow-inner"
-                    style="background: var(--bg-main); border: 1px solid var(--border); color: var(--text-main);"
-                    onfocus="this.style.borderColor='var(--accent)'"
-                    onblur="this.style.borderColor='var(--border)'">
-                <button onclick="sendQuery()" class="btn-primary px-8 py-4 rounded-lg font-bold tracking-wide whitespace-nowrap shadow-lg">
-                    {% if theme == 'dark-gothic' %}INVOKE{% else %}SEND{% endif %}
-                </button>
+
+            <!-- Right Column: Chat Section -->
+            <div id="chat-section" class="lg:col-span-2">
+                <div class="rounded-xl p-6 h-full {% if theme == 'dark-gothic' %}ouija-border{% else %}legal-border professional-shadow{% endif %}" 
+                     style="background-color: var(--bg-card); color: var(--text-main);">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-3" style="color: var(--primary);">
+                        {% if theme == 'dark-gothic' %}
+                        <span class="animate-pulse">💀</span> Commune with the Entity
+                        {% else %}
+                        <span>💬</span> Counsel Inquiry
+                        {% endif %}
+                    </h2>
+                    
+                    <div id="chat-history" class="h-[500px] overflow-y-auto mb-4 p-5 rounded-lg space-y-4 scroll-smooth" 
+                         style="background: var(--bg-input); border: 1px solid var(--border);">
+                        <div class="text-center text-xs uppercase tracking-widest opacity-40 pt-32">
+                            {% if theme == 'dark-gothic' %}
+                            ... The void is listening ...
+                            {% else %}
+                            System Ready. Awaiting Input.
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3">
+                        <input type="text" id="queryInput" 
+                            placeholder="{% if theme == 'dark-gothic' %}Ask the spirit...{% else %}Enter your query here...{% endif %}" 
+                            class="w-full p-4 rounded-lg outline-none transition-all shadow-inner"
+                            style="background: var(--bg-main); border: 1px solid var(--border); color: var(--text-main);"
+                            onfocus="this.style.borderColor='var(--accent)'"
+                            onblur="this.style.borderColor='var(--border)'">
+                        <button onclick="sendQuery()" class="btn-primary px-8 py-4 rounded-lg font-bold tracking-wide whitespace-nowrap shadow-lg">
+                            {% if theme == 'dark-gothic' %}INVOKE{% else %}SEND{% endif %}
+                        </button>
+                    </div>
+                </div>
             </div>
+
         </div>
 
     </main>
 
     <!-- Footer -->
-    <footer class="mt-12 text-xs opacity-30 tracking-widest uppercase animate-fade-in" style="animation-delay: 0.4s; opacity: 0;">
+    <footer class="mt-8 text-xs opacity-30 tracking-widest uppercase animate-fade-in" style="animation-delay: 0.4s; opacity: 0;">
         Powered by Skeleton Core v1.0
     </footer>
 
@@ -182,6 +229,31 @@
          aria-live="polite" 
          aria-atomic="true">
     </div>
+
+    <!-- Audio Elements -->
+    {% if theme == 'dark-gothic' %}
+    <!-- Ghost Mode: Auto-looping ambience -->
+    <audio id="bg-audio" loop>
+        <source src="{{ url_for('static', filename='sounds/drone.mp3') }}" type="audio/mpeg">
+    </audio>
+    <audio id="response-audio">
+        <source src="{{ url_for('static', filename='sounds/static_glitch.mp3') }}" type="audio/mpeg">
+    </audio>
+    {% else %}
+    <!-- Legal Mode: Interaction sounds only -->
+    <audio id="response-audio">
+        <source src="{{ url_for('static', filename='sounds/typewriter_fast.mp3') }}" type="audio/mpeg">
+    </audio>
+    {% endif %}
+
+    <!-- Mute Toggle Button (Fixed Position) -->
+    <button id="sound-toggle" 
+            class="fixed bottom-4 right-4 p-3 rounded-full transition-all z-50 shadow-lg hover:scale-110"
+            style="background: rgba(0, 0, 0, 0.2); color: white; backdrop-filter: blur(10px);"
+            aria-label="Toggle sound"
+            title="Toggle sound">
+        🔊
+    </button>
 
     <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>

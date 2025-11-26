@@ -98,16 +98,37 @@ def create_app(config: Any) -> Flask:
 
         return Response(stream_with_context(generate_progress()), mimetype='text/event-stream')
     
+    @app.route('/documents', methods=['GET'])
+    def list_documents():
+        """List all uploaded documents"""
+        try:
+            docs = vector_store.list_documents()
+            return jsonify({'documents': docs})
+        except Exception as e:
+            print(f"Error listing documents: {e}")
+            return jsonify({'error': str(e)}), 500
+    
+    @app.route('/documents/<path:source>', methods=['DELETE'])
+    def delete_document(source):
+        """Delete a specific document"""
+        try:
+            deleted_count = vector_store.delete_document(source)
+            return jsonify({'success': True, 'deleted_chunks': deleted_count})
+        except Exception as e:
+            print(f"Error deleting document: {e}")
+            return jsonify({'error': str(e)}), 500
+    
     @app.route('/chat', methods=['POST'])
     def chat():
         """Handle chat queries with RAG and Personality"""
         data = request.json
         query = data.get('query')
+        selected_sources = data.get('sources', None)  # Optional filter
         if not query:
             return jsonify({'error': 'No query provided'}), 400
             
-        # 1. Retrieve Context from Brain
-        context_results = vector_store.search(query, n_results=3)
+        # 1. Retrieve Context from Brain (with optional source filter)
+        context_results = vector_store.search(query, n_results=3, filter_sources=selected_sources)
         context_text = "\n\n".join([r['text'] for r in context_results])
         
         # 2. Construct the Prompt
