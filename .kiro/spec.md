@@ -11,7 +11,7 @@ The core logic resides in `skeleton_core`. It must be reusable.
 - **AI Integration:** OpenAI API (ChatCompletion + Embeddings).
 - **Frontend:** Simple HTML/TailwindCSS (served via Flask Jinja2).
 
-## 3. The "Chameleon" Config System (Crucial)
+## 3. The Config System (Crucial)
 The app must load a configuration file that determines its **Personality**.
 The `Config` object must contain:
 - `APP_NAME`: String (e.g., "Legal Eagle" or "Ouija Board")

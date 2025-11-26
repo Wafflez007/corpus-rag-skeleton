@@ -1,6 +1,6 @@
 # Product Overview
 
-This is a "Chameleon" RAG (Retrieval Augmented Generation) web application that allows users to chat with uploaded documents. The core feature is its ability to switch personalities and themes based on configuration.
+This is "Project Corpus" - a RAG (Retrieval Augmented Generation) web application that allows users to chat with uploaded documents. The core feature is its ability to switch personalities and themes based on configuration.
 
 ## Key Capabilities
 

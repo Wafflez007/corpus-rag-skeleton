@@ -1,4 +1,4 @@
-# Chameleon RAG - Multi-Personality Document Chat
+# Project Corpus - RAG Skeleton
 
 A configurable RAG (Retrieval Augmented Generation) web application that lets you chat with uploaded documents. The unique "skeleton + apps" architecture allows multiple AI personalities and themes to share the same core logic.
 
@@ -23,8 +23,8 @@ Mystical, spooky interactions with your documents from beyond the veil.
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
-cd <repo-name>
+git clone https://github.com/YOUR_USERNAME/corpus-rag-skeleton.git
+cd corpus-rag-skeleton
 ```
 
 2. Create a virtual environment:
