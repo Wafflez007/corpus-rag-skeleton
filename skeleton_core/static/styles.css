@@ -1,189 +1,1572 @@
 /* ========================================
-   CSS Variables & Theme Definitions
+   PROJECT CORPUS - STYLES
+   Comprehensive CSS Architecture
+   ======================================== */
+
+/* ========================================
+   SECTION 1: CSS VARIABLES & THEME DEFINITIONS
    ======================================== */
 
 /* Dark Gothic Theme - Ouija Board */
 .theme-dark-gothic {
-    --primary: #8b0000;       /* Deep Blood Red */
-    --secondary: #2b0505;     /* Dried Blood */
-    --accent: #ff3f3f;        /* Bright Red Glow */
-    --bg-main: #050505;       /* Void Black */
-    --bg-card: #110a0a;       /* Dark Card */
-    --bg-input: #000000;      /* Input Black */
-    --text-main: #d4d4d4;     /* Ghostly White */
-    --text-dim: #666;
-    --border: #3a1a1a;
+    /* Color Palette */
+    --primary: #8b0000;           /* Deep Blood Red */
+    --secondary: #2b0505;         /* Dried Blood */
+    --accent: #ff3f3f;            /* Bright Red Glow */
+    --bg-main: #050505;           /* Void Black */
+    --bg-card: #110a0a;           /* Dark Card */
+    --bg-input: #000000;          /* Input Black */
+    --text-main: #d4d4d4;         /* Ghostly White */
+    --text-dim: #666666;          /* Dimmed Text */
+    --border: #3a1a1a;            /* Dark Border */
     
-    background-color: #000;
+    /* Typography */
+    --font-heading: 'Creepster', cursive, sans-serif;
+    --font-body: 'Georgia', serif, 'Times New Roman', serif;
+    --font-mono: 'Courier New', monospace, 'Courier', monospace;
+    
+    /* Spacing Scale */
+    --spacing-xs: 0.25rem;        /* 4px */
+    --spacing-sm: 0.5rem;         /* 8px */
+    --spacing-md: 1rem;           /* 16px */
+    --spacing-lg: 1.5rem;         /* 24px */
+    --spacing-xl: 2rem;           /* 32px */
+    
+    /* Border Radii */
+    --radius-sm: 0.25rem;         /* 4px */
+    --radius-md: 0.5rem;          /* 8px */
+    --radius-lg: 0.75rem;         /* 12px */
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --shadow-glow: 0 0 30px rgba(139, 0, 0, 0.15);
+    
+    /* Theme-specific properties */
+    background-color: var(--bg-main, #000000);
     background-image: radial-gradient(circle at 50% 50%, #1a0505 0%, #000000 100%);
-    font-family: 'Georgia', serif;
-    cursor: crosshair;
-}
-
-.theme-dark-gothic button {
-    /* When hovering buttons, show a "grab" hand */
-    cursor: alias; 
-}
-
-.theme-dark-gothic .spooky-title {
-    font-family: 'Creepster', cursive;
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 10px var(--primary), 4px 4px 0px #000;
-    animation: title-pulse 4s infinite ease-in-out;
+    font-family: var(--font-body, Georgia, serif);
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none' stroke='%238b0000' stroke-width='2'><path d='M16 2 L28 26 Q16 30 4 26 Z' fill='rgba(20,0,0,0.5)'/><circle cx='16' cy='14' r='4' stroke='%23ff3f3f' stroke-width='1.5'/></svg>") 16 14, auto;
 }
 
 /* Professional Blue Theme - Legal Eagle */
 .theme-blue-corporate {
-    --primary: #0f172a;       /* Deep Slate Navy (Authority) */
-    --secondary: #334155;     /* Steel Grey (Stability) */
-    --accent: #ca8a04;        /* Muted Gold (Prestige - used sparingly) */
-    --bg-main: #f8fafc;       /* Very Light Grey Background */
-    --bg-card: #ffffff;       /* Crisp White Card */
-    --bg-input: #f1f5f9;      /* Light Grey Input */
-    --text-main: #1e293b;     /* Dark Slate Text */
-    --text-dim: #64748b;      /* Muted Text */
-    --border: #e2e8f0;        /* Subtle Border */
+    /* Color Palette */
+    --primary: #0f172a;           /* Deep Slate Navy (Authority) */
+    --secondary: #334155;         /* Steel Grey (Stability) */
+    --accent: #ca8a04;            /* Muted Gold (Prestige) */
+    --bg-main: #f8fafc;           /* Very Light Grey Background */
+    --bg-card: #ffffff;           /* Crisp White Card */
+    --bg-input: #f1f5f9;          /* Light Grey Input */
+    --text-main: #1e293b;         /* Dark Slate Text */
+    --text-dim: #64748b;          /* Muted Text */
+    --border: #e2e8f0;            /* Subtle Border */
     
-    background-color: #f1f5f9;
-    /* Use the new professional font */
-    font-family: 'IBM Plex Sans', sans-serif;
-    cursor: default;
+    /* Typography */
+    --font-heading: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'Courier New', monospace, 'Courier', monospace;
+    
+    /* Spacing Scale */
+    --spacing-xs: 0.25rem;        /* 4px */
+    --spacing-sm: 0.5rem;         /* 8px */
+    --spacing-md: 1rem;           /* 16px */
+    --spacing-lg: 1.5rem;         /* 24px */
+    --spacing-xl: 2rem;           /* 32px */
+    
+    /* Border Radii */
+    --radius-sm: 0.25rem;         /* 4px - Sharp corners for formality */
+    --radius-md: 0.375rem;        /* 6px */
+    --radius-lg: 0.5rem;          /* 8px */
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-glow: 0 2px 4px rgba(15, 23, 42, 0.1);
+    
+    /* Theme-specific properties */
+    background-color: var(--bg-main, #f1f5f9);
+    font-family: var(--font-body, 'IBM Plex Sans', sans-serif);
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 19l7-7 3 3-7 7-3-3z'></path><path d='M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z'></path><path d='M2 2l7.586 7.586'></path><circle cx='11' cy='11' r='2'></circle></svg>") 0 0, auto;
 }
 
-.theme-blue-corporate button {
-    cursor: pointer;
-}
-
-/* LEGAL INPUT FIELD POLISH */
-.theme-blue-corporate input[type="text"] {
-    font-family: 'Courier New', monospace; /* Looks like a typewriter/legal doc */
-    letter-spacing: -0.5px;
-}
-
-/* Legal Theme Button Override */
-.theme-blue-corporate .btn-primary {
-    background: var(--primary);
-    border-radius: 4px; /* Sharper corners = more serious */
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 0.85rem;
-    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
-    border: none;
-}
-
-.theme-blue-corporate .btn-primary:hover {
-    background: var(--secondary);
-    transform: translateY(-1px);
-}
-
-/* Legal Chat Bubbles */
-.theme-blue-corporate .chat-message-user {
-    background: var(--primary);
-    border-radius: 4px; /* Boxy */
-    font-weight: 500;
-}
-
-.theme-blue-corporate .chat-message-ai {
-    background: #f8fafc;
-    border-left: 3px solid var(--accent); /* The "Legal Pad" margin look */
-    border-radius: 0 4px 4px 0;
-    font-family: 'Georgia', serif; /* Serif for the AI answer looks like a document */
-}
 
 /* ========================================
-   Common Styles
+   SECTION 2: BASE STYLES & RESET
    ======================================== */
 
+/* Box sizing reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Body base styles */
 body {
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.5s ease, color 0.5s ease;
 }
 
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Chat history smooth scrolling */
+#chat-history {
+    scroll-behavior: smooth;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Remove default margins */
+h1, h2, h3, h4, h5, h6, p, ul, ol {
+    margin: 0;
+    padding: 0;
+}
+
+/* Button reset */
+button {
+    font-family: inherit;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Input reset */
+input, textarea {
+    font-family: inherit;
+    border: none;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+/* ========================================
+   SECTION 3: COMPONENT STYLES
+   ======================================== */
+
+/* Button Components */
 .btn-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--primary, #0f172a) 0%, var(--secondary, #334155) 100%);
     color: white;
-    transition: all 0.2s ease;
-    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.2s ease, box-shadow 0.3s ease, filter 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+    contain: layout style paint;
+    box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    filter: brightness(1.2);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1)), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    filter: brightness(1.1);
 }
 
 .btn-primary:active {
-    transform: translateY(0px);
+    transform: translateY(0px) scale(1);
+    box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
 }
 
-/* Chat Bubbles */
+.btn-primary:focus-visible {
+    outline: 2px solid var(--accent, #ca8a04);
+    outline-offset: 2px;
+}
+
+/* Chat Message Components */
 .chat-message {
     animation: pop-in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    padding: var(--spacing-md, 1rem);
+    margin-bottom: var(--spacing-sm, 0.5rem);
+    border-radius: var(--radius-md, 0.5rem);
+    contain: layout style paint;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chat-message:hover {
+    transform: translateX(2px);
 }
 
 .chat-message-user {
-    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+    background: linear-gradient(135deg, var(--secondary, #334155) 0%, var(--primary, #0f172a) 100%);
     color: white;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    transition: box-shadow 0.2s ease;
+}
+
+.chat-message-user:hover {
+    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
 }
 
 .chat-message-ai {
-    background: var(--bg-main);
-    border: 1px solid var(--border);
-    color: var(--text-main);
+    background: var(--bg-main, #f8fafc);
+    border: 1px solid var(--border, #e2e8f0);
+    color: var(--text-main, #1e293b);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
+.chat-message-ai:hover {
+    box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+    border-color: var(--text-dim, #64748b);
+}
+
+/* Message icon styling */
+.message-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    min-height: 32px;
+    margin-top: var(--spacing-xs, 0.25rem);
+}
+
+/* Timestamp styling - non-intrusive */
+.message-timestamp {
+    font-size: 0.7rem;
+    opacity: 0.5;
+    font-family: var(--font-mono, 'Courier New', monospace);
+    padding-left: var(--spacing-sm, 0.5rem);
+    transition: opacity 0.2s ease;
+}
+
+.chat-message:hover .message-timestamp {
+    opacity: 0.7;
+}
+
+/* Code block styling within messages */
+.chat-message code {
+    font-family: var(--font-mono, 'Courier New', monospace);
+    font-size: 0.9em;
+    padding: 0.2em 0.4em;
+    border-radius: var(--radius-sm, 0.25rem);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Card Components */
+.card {
+    background-color: var(--bg-card, #ffffff);
+    border-radius: var(--radius-lg, 0.75rem);
+    padding: var(--spacing-lg, 1.5rem);
+    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+    contain: layout style paint;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+}
+
+/* Input Components */
+.input-field {
+    background: var(--bg-input, #f1f5f9);
+    border: 1px solid var(--border, #e2e8f0);
+    color: var(--text-main, #1e293b);
+    padding: var(--spacing-md, 1rem);
+    border-radius: var(--radius-md, 0.5rem);
+    transition: border-color 0.2s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.input-field:focus {
+    border-color: var(--accent, #ca8a04);
+    box-shadow: 0 0 0 3px rgba(202, 138, 4, 0.1);
+    transform: translateY(-1px);
+}
+
+.input-field:hover {
+    border-color: var(--text-dim, #64748b);
+}
+
+/* Loading Indicators */
+.loading-spinner {
+    border: 3px solid var(--border, #e2e8f0);
+    border-top-color: var(--accent, #ca8a04);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 0.8s linear infinite;
+}
+
+.loading-indicator {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease;
+    opacity: 1;
+    animation: fade-in 0.3s ease-out;
+}
+
+/* Progress Bar */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-input, #f1f5f9);
+    border-radius: var(--radius-sm, 0.25rem);
+    overflow: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: var(--accent, #ca8a04);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: var(--radius-sm, 0.25rem);
+}
+
+/* Upload Status */
+#upload-status {
+    transition: opacity 0.3s ease-in-out;
+}
+
+#upload-progress-container {
+    transition: opacity 0.3s ease-in-out, max-height 0.3s ease;
+}
+
+/* Error Message Components */
+.error-message {
+    margin: var(--spacing-md, 1rem) 0;
+    animation: slide-up 0.3s ease-out;
+    contain: layout style paint;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.error-retry-btn {
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-weight: 600;
+    min-height: 32px;
+    min-width: 32px;
+}
+
+.error-retry-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
+    filter: brightness(1.1);
+}
+
+.error-retry-btn:active {
+    transform: translateY(0);
+}
+
+.error-retry-btn:focus-visible {
+    outline: 2px solid #ef4444;
+    outline-offset: 2px;
+}
+
+.error-dismiss-btn {
+    transition: all 0.2s ease;
+    cursor: pointer;
+    min-height: 32px;
+    min-width: 32px;
+    font-weight: bold;
+}
+
+.error-dismiss-btn:hover {
+    background-color: rgba(239, 68, 68, 0.2) !important;
+}
+
+.error-dismiss-btn:focus-visible {
+    outline: 2px solid #ef4444;
+    outline-offset: 2px;
+}
+
+
 /* ========================================
-   Theme Specific Effects
+   SECTION 4: UTILITY CLASSES
    ======================================== */
 
-/* Spooky Effects */
-.ouija-border {
-    border: 1px solid var(--border);
-    box-shadow: 0 0 30px rgba(139, 0, 0, 0.15), inset 0 0 50px rgba(0,0,0,0.8);
-    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23220000' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+/* Visibility */
+.hidden {
+    display: none !important;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+/* Text Utilities */
+.text-center {
+    text-align: center;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+.text-dim {
+    color: var(--text-dim, #64748b);
+}
+
+/* Spacing Utilities */
+.mt-xs { margin-top: var(--spacing-xs, 0.25rem); }
+.mt-sm { margin-top: var(--spacing-sm, 0.5rem); }
+.mt-md { margin-top: var(--spacing-md, 1rem); }
+.mt-lg { margin-top: var(--spacing-lg, 1.5rem); }
+.mt-xl { margin-top: var(--spacing-xl, 2rem); }
+
+.mb-xs { margin-bottom: var(--spacing-xs, 0.25rem); }
+.mb-sm { margin-bottom: var(--spacing-sm, 0.5rem); }
+.mb-md { margin-bottom: var(--spacing-md, 1rem); }
+.mb-lg { margin-bottom: var(--spacing-lg, 1.5rem); }
+.mb-xl { margin-bottom: var(--spacing-xl, 2rem); }
+
+.p-xs { padding: var(--spacing-xs, 0.25rem); }
+.p-sm { padding: var(--spacing-sm, 0.5rem); }
+.p-md { padding: var(--spacing-md, 1rem); }
+.p-lg { padding: var(--spacing-lg, 1.5rem); }
+.p-xl { padding: var(--spacing-xl, 2rem); }
+
+/* Border Utilities */
+.border-radius-sm { border-radius: var(--radius-sm, 0.25rem); }
+.border-radius-md { border-radius: var(--radius-md, 0.5rem); }
+.border-radius-lg { border-radius: var(--radius-lg, 0.75rem); }
+
+/* Shadow Utilities */
+.shadow-sm { box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05)); }
+.shadow-md { box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1)); }
+.shadow-lg { box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1)); }
+
+
+/* ========================================
+   SECTION 5: ANIMATIONS & TRANSITIONS
+   ======================================== */
+
+/* Keyframe Animations */
+@keyframes pop-in {
+    0% { 
+        opacity: 0; 
+        transform: translateY(10px) scale(0.95); 
+    }
+    100% { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+    }
 }
 
 @keyframes title-pulse {
-    0%, 100% { text-shadow: 0 0 10px var(--primary), 2px 2px 0px #000; opacity: 1; }
-    50% { text-shadow: 0 0 20px var(--accent), 2px 2px 0px #000; opacity: 0.9; }
+    0%, 100% { 
+        text-shadow: 0 0 10px var(--primary, #8b0000), 0 0 20px var(--primary, #8b0000), 2px 2px 0px #000; 
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% { 
+        text-shadow: 0 0 20px var(--accent, #ff3f3f), 0 0 40px var(--accent, #ff3f3f), 2px 2px 0px #000; 
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
 }
 
-/* Legal Effects */
-.legal-border {
-    border: 1px solid #cbd5e1;
-    border-top: 4px solid var(--primary);
-    /* Subtle grid pattern background for the card */
+@keyframes button-glow {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(139, 0, 0, 0.5), inset 0 0 10px rgba(255, 63, 63, 0.1);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(255, 63, 63, 0.7), inset 0 0 15px rgba(255, 63, 63, 0.2);
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes slide-up {
+    0% { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    100% { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes mystical-fog {
+    0%, 100% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        opacity: 0.8;
+        transform: translate(-10px, -10px) scale(1.05);
+    }
+    66% {
+        opacity: 0.9;
+        transform: translate(10px, 10px) scale(0.95);
+    }
+}
+
+@keyframes floating-particles {
+    0%, 100% {
+        background-position: 0% 0%;
+        opacity: 0.6;
+    }
+    25% {
+        background-position: 100% 50%;
+        opacity: 0.8;
+    }
+    50% {
+        background-position: 50% 100%;
+        opacity: 0.7;
+    }
+    75% {
+        background-position: 0% 50%;
+        opacity: 0.9;
+    }
+}
+
+@keyframes professional-sweep {
+    0%, 100% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+}
+
+@keyframes grid-shift {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
+}
+
+/* Animation Classes */
+.animate-fade-in {
+    animation: fade-in 0.8s ease-out forwards;
+}
+
+.animate-slide-up {
+    animation: slide-up 0.6s ease-out forwards;
+}
+
+.animate-pop-in {
+    animation: pop-in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    html {
+        scroll-behavior: auto;
+    }
+    
+    #chat-history {
+        scroll-behavior: auto;
+    }
+    
+    /* Disable transform animations for reduced motion */
+    .btn-primary:hover,
+    .chat-message:hover,
+    .card:hover,
+    .input-field:focus {
+        transform: none !important;
+    }
+}
+
+
+/* ========================================
+   SECTION 6: RESPONSIVE DESIGN
+   ======================================== */
+
+/* Mobile First - Base styles above are for mobile */
+
+/* Base touch target sizes for all interactive elements */
+button,
+input[type="button"],
+input[type="submit"],
+a.btn-primary,
+.btn-primary {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-md, 1rem) var(--spacing-lg, 1.5rem);
+}
+
+input[type="text"],
+input[type="file"],
+textarea {
+    min-height: 44px;
+    padding: var(--spacing-md, 1rem);
+}
+
+/* Mobile: Less than 768px */
+@media (max-width: 767px) {
+    /* Single column layout */
+    body {
+        padding: var(--spacing-sm, 0.5rem);
+    }
+    
+    /* Header adjustments */
+    header {
+        margin-bottom: var(--spacing-md, 1rem);
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    header p {
+        font-size: 0.75rem;
+    }
+    
+    /* Main container adjustments */
+    main {
+        padding: var(--spacing-md, 1rem);
+        max-width: 100%;
+    }
+    
+    /* Upload section - stack vertically */
+    #upload-section .flex {
+        flex-direction: column;
+        gap: var(--spacing-sm, 0.5rem);
+    }
+    
+    #upload-section button {
+        width: 100%;
+    }
+    
+    /* Chat section adjustments */
+    #chat-history {
+        height: 60vh;
+        min-height: 300px;
+        max-height: calc(100vh - 400px);
+        padding: var(--spacing-sm, 0.5rem);
+    }
+    
+    /* Chat input - stack vertically */
+    #chat-section > div:last-child {
+        flex-direction: column;
+        gap: var(--spacing-sm, 0.5rem);
+    }
+    
+    #chat-section button {
+        width: 100%;
+    }
+    
+    /* Ensure adequate touch targets */
+    button {
+        min-height: 44px;
+        padding: var(--spacing-md, 1rem);
+        font-size: 1rem;
+    }
+    
+    input[type="text"],
+    input[type="file"] {
+        min-height: 44px;
+        font-size: 1rem;
+    }
+    
+    /* Chat messages - better mobile spacing */
+    .chat-message {
+        padding: var(--spacing-sm, 0.5rem);
+    }
+    
+    .chat-message-user,
+    .chat-message-ai {
+        padding: var(--spacing-md, 1rem);
+        max-width: 90%;
+        font-size: 0.9rem;
+    }
+    
+    /* Adjust card padding */
+    .card {
+        padding: var(--spacing-md, 1rem);
+    }
+    
+    /* Footer adjustments */
+    footer {
+        margin-top: var(--spacing-lg, 1.5rem);
+        font-size: 0.65rem;
+    }
+}
+
+/* Tablet: 768px to 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+    /* Optimize spacing for tablet */
+    main {
+        padding: var(--spacing-lg, 1.5rem);
+    }
+    
+    .chat-message {
+        padding: var(--spacing-md, 1rem);
+    }
+    
+    .card {
+        padding: var(--spacing-lg, 1.5rem);
+    }
+    
+    /* Chat history height optimization */
+    #chat-history {
+        height: 400px;
+    }
+    
+    /* Ensure touch targets remain adequate */
+    button,
+    input[type="text"],
+    input[type="file"] {
+        min-height: 44px;
+    }
+}
+
+/* Desktop: 1024px and up */
+@media (min-width: 1024px) {
+    body {
+        font-size: 1rem;
+        padding: var(--spacing-md, 1rem);
+    }
+    
+    main {
+        padding: var(--spacing-xl, 2rem);
+    }
+    
+    .chat-message {
+        padding: var(--spacing-lg, 1.5rem);
+    }
+    
+    .card {
+        padding: var(--spacing-xl, 2rem);
+    }
+    
+    /* Optimize chat history for desktop */
+    #chat-history {
+        height: 24rem;
+    }
+    
+    /* Desktop can have slightly smaller touch targets but still accessible */
+    button {
+        min-height: 40px;
+    }
+    
+    input[type="text"],
+    input[type="file"] {
+        min-height: 40px;
+    }
+}
+
+/* Landscape mobile optimization */
+@media (max-width: 767px) and (orientation: landscape) {
+    /* Reduce chat height for landscape to account for virtual keyboard */
+    #chat-history {
+        height: 40vh;
+        min-height: 200px;
+    }
+    
+    /* Reduce header size in landscape */
+    header {
+        margin-bottom: var(--spacing-sm, 0.5rem);
+    }
+    
+    header h1 {
+        font-size: 1.5rem;
+    }
+    
+    header p {
+        font-size: 0.7rem;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Ensure crisp rendering on retina displays */
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+
+/* ========================================
+   SECTION 7: THEME-SPECIFIC OVERRIDES
+   ======================================== */
+
+/* Dark Gothic Theme Overrides */
+
+/* Custom planchette cursor for Ouija theme */
+.theme-dark-gothic,
+.theme-dark-gothic * {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none' stroke='%238b0000' stroke-width='2'><path d='M16 2 L28 26 Q16 30 4 26 Z' fill='rgba(20,0,0,0.5)'/><circle cx='16' cy='14' r='4' stroke='%23ff3f3f' stroke-width='1.5'/></svg>") 16 14, auto;
+}
+
+.theme-dark-gothic button,
+.theme-dark-gothic a,
+.theme-dark-gothic .btn-primary {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none' stroke='%23ff0000' stroke-width='2'><path d='M16 2 L28 26 Q16 30 4 26 Z' fill='rgba(100,0,0,0.3)'/><circle cx='16' cy='14' r='4' stroke='%23ff0000' fill='%23ff0000' stroke-width='1.5'/></svg>") 16 14, pointer;
+}
+
+.theme-dark-gothic input,
+.theme-dark-gothic textarea {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none' stroke='%238b0000' stroke-width='2'><path d='M16 2 L28 26 Q16 30 4 26 Z' fill='rgba(20,0,0,0.5)'/><circle cx='16' cy='14' r='4' stroke='%23ff3f3f' stroke-width='1.5'/></svg>") 16 14, text;
+}
+
+/* Animated radial gradient background with depth and floating particles */
+.theme-dark-gothic {
+    background: radial-gradient(circle at 50% 50%, #1a0505 0%, #0a0000 50%, #000000 100%);
+    background-attachment: fixed;
+    position: relative;
+}
+
+/* Vignette effect removed - was causing black side boxes */
+
+/* Animated mystical fog overlay */
+.theme-dark-gothic::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: 
-        linear-gradient(#e2e8f0 1px, transparent 1px),
-        linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+        radial-gradient(circle at 20% 30%, rgba(139, 0, 0, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 63, 63, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(139, 0, 0, 0.22) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Floating particles effect */
+.theme-dark-gothic::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(3px 3px at 20% 30%, rgba(255, 63, 63, 0.5), transparent),
+        radial-gradient(3px 3px at 60% 70%, rgba(139, 0, 0, 0.5), transparent),
+        radial-gradient(2px 2px at 50% 50%, rgba(255, 63, 63, 0.4), transparent),
+        radial-gradient(2px 2px at 80% 10%, rgba(139, 0, 0, 0.5), transparent),
+        radial-gradient(3px 3px at 90% 60%, rgba(255, 63, 63, 0.4), transparent),
+        radial-gradient(2px 2px at 33% 90%, rgba(139, 0, 0, 0.5), transparent);
+    background-size: 200% 200%;
+    background-position: 0% 0%;
+    animation: floating-particles 25s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Ensure content stays above animated backgrounds */
+.theme-dark-gothic > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Creepster font for headings, Georgia for body */
+.theme-dark-gothic h1,
+.theme-dark-gothic h2,
+.theme-dark-gothic h3,
+.theme-dark-gothic h4,
+.theme-dark-gothic h5,
+.theme-dark-gothic h6 {
+    font-family: var(--font-heading, 'Creepster', cursive);
+    letter-spacing: 0.1em;
+}
+
+.theme-dark-gothic p,
+.theme-dark-gothic div,
+.theme-dark-gothic span,
+.theme-dark-gothic input,
+.theme-dark-gothic textarea,
+.theme-dark-gothic button {
+    font-family: var(--font-body, 'Georgia', serif);
+}
+
+/* Pulsing glow animation on title */
+.theme-dark-gothic .spooky-title,
+.theme-dark-gothic h1 {
+    font-family: var(--font-heading, 'Creepster', cursive);
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px var(--primary, #8b0000), 0 0 20px var(--primary, #8b0000), 4px 4px 0px #000;
+    animation: title-pulse 4s infinite ease-in-out;
+    color: var(--accent, #ff3f3f);
+}
+
+/* Pulsing glow on buttons */
+.theme-dark-gothic .btn-primary,
+.theme-dark-gothic button {
+    background: linear-gradient(135deg, var(--primary, #8b0000) 0%, var(--secondary, #2b0505) 100%);
+    border: 1px solid var(--accent, #ff3f3f);
+    box-shadow: 0 0 15px rgba(139, 0, 0, 0.5), inset 0 0 10px rgba(255, 63, 63, 0.1);
+    animation: button-glow 3s infinite ease-in-out;
+    border-radius: var(--radius-md, 0.5rem);
+    font-family: var(--font-body, 'Georgia', serif);
+}
+
+.theme-dark-gothic .btn-primary:hover,
+.theme-dark-gothic button:hover {
+    box-shadow: 0 0 25px rgba(255, 63, 63, 0.8), inset 0 0 15px rgba(255, 63, 63, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Mystical glow on cards and containers */
+.theme-dark-gothic .card,
+.theme-dark-gothic .ouija-border {
+    border: 1px solid var(--border, #3a1a1a);
+    box-shadow: 0 0 30px rgba(139, 0, 0, 0.3), inset 0 0 50px rgba(0, 0, 0, 0.8);
+    background-color: var(--bg-card, #110a0a);
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23220000' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+    border-radius: var(--radius-md, 0.5rem);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Blood splatter effect on main container */
+.theme-dark-gothic .ouija-border::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 10%;
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, rgba(139, 0, 0, 0.6) 0%, rgba(139, 0, 0, 0.4) 40%, transparent 70%);
+    border-radius: 50% 40% 50% 40%;
+    filter: blur(2px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.theme-dark-gothic .ouija-border::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    right: 15%;
+    width: 35px;
+    height: 35px;
+    background: radial-gradient(circle, rgba(139, 0, 0, 0.5) 0%, rgba(139, 0, 0, 0.3) 40%, transparent 70%);
+    border-radius: 40% 50% 40% 50%;
+    filter: blur(2px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Enhanced mystical shadows on interactive elements */
+.theme-dark-gothic input[type="text"],
+.theme-dark-gothic input[type="file"],
+.theme-dark-gothic textarea {
+    background: var(--bg-input, #000000);
+    border: 1px solid var(--border, #3a1a1a);
+    color: var(--text-main, #d4d4d4);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px rgba(139, 0, 0, 0.2);
+    border-radius: var(--radius-md, 0.5rem);
+    font-family: var(--font-body, 'Georgia', serif);
+}
+
+.theme-dark-gothic input[type="text"]:focus,
+.theme-dark-gothic textarea:focus {
+    border-color: var(--accent, #ff3f3f);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 63, 63, 0.5);
+}
+
+/* Chat message styling with mystical effects */
+.theme-dark-gothic .chat-message-user {
+    background: linear-gradient(135deg, var(--secondary, #2b0505) 0%, var(--primary, #8b0000) 100%);
+    border: 1px solid var(--border, #3a1a1a);
+    box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
+    border-radius: var(--radius-md, 0.5rem);
+    font-family: var(--font-body, 'Georgia', serif);
+}
+
+.theme-dark-gothic .chat-message-ai {
+    background: var(--bg-card, #110a0a);
+    border: 1px solid var(--border, #3a1a1a);
+    box-shadow: 0 0 20px rgba(139, 0, 0, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.7);
+    border-radius: var(--radius-md, 0.5rem);
+    font-family: var(--font-body, 'Georgia', serif);
+    color: var(--text-main, #d4d4d4);
+}
+
+/* Glowing icon effects for dark gothic theme */
+.theme-dark-gothic .message-icon {
+    filter: drop-shadow(0 0 5px var(--accent, #ff3f3f));
+}
+
+/* Main container with dot pattern */
+.theme-dark-gothic main {
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23220000' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+    background-color: rgba(5, 5, 5, 0.8);
+    box-shadow: 0 0 50px rgba(139, 0, 0, 0.3), inset 0 0 100px rgba(0, 0, 0, 0.9);
+}
+
+/* Chat history with mystical glow */
+.theme-dark-gothic #chat-history {
+    background: var(--bg-card, #110a0a);
+    border: 1px solid var(--border, #3a1a1a);
+    box-shadow: 0 0 30px rgba(139, 0, 0, 0.3), inset 0 0 50px rgba(0, 0, 0, 0.8);
+}
+
+/* Loading spinner with mystical glow */
+.theme-dark-gothic .loading-spinner {
+    border: 3px solid var(--border, #3a1a1a);
+    border-top-color: var(--accent, #ff3f3f);
+    box-shadow: 0 0 15px rgba(255, 63, 63, 0.5);
+}
+
+/* Progress bar with glowing effect */
+.theme-dark-gothic .progress-bar {
+    background: var(--bg-input, #000000);
+    border: 1px solid var(--border, #3a1a1a);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9);
+}
+
+.theme-dark-gothic .progress-bar-fill {
+    background: linear-gradient(90deg, var(--primary, #8b0000) 0%, var(--accent, #ff3f3f) 100%);
+    box-shadow: 0 0 15px rgba(255, 63, 63, 0.7);
+}
+
+/* Scrollbar styling for dark gothic theme */
+.theme-dark-gothic ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.theme-dark-gothic ::-webkit-scrollbar-thumb {
+    background: var(--primary, #8b0000);
+    border-radius: var(--radius-sm, 4px);
+    box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
+}
+
+.theme-dark-gothic ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent, #ff3f3f);
+    box-shadow: 0 0 15px rgba(255, 63, 63, 0.8);
+}
+
+/* Professional Blue Theme Overrides */
+
+/* Animated subtle gradient background with moving light */
+.theme-blue-corporate {
+    position: relative;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+}
+
+/* Animated professional light sweep effect */
+.theme-blue-corporate::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(202, 138, 4, 0.08) 25%,
+        rgba(15, 23, 42, 0.05) 50%,
+        transparent 75%
+    );
+    background-size: 400% 400%;
+    animation: professional-sweep 20s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Subtle grid animation */
+.theme-blue-corporate::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: 0 0;
+    animation: grid-shift 30s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.7;
+}
+
+/* Ensure content stays above animated backgrounds */
+.theme-blue-corporate > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Custom fountain pen cursor for Legal Eagle theme */
+.theme-blue-corporate,
+.theme-blue-corporate * {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 19l7-7 3 3-7 7-3-3z'></path><path d='M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z'></path><path d='M2 2l7.586 7.586'></path><circle cx='11' cy='11' r='2'></circle></svg>") 0 0, auto;
+}
+
+.theme-blue-corporate button,
+.theme-blue-corporate a,
+.theme-blue-corporate .btn-primary {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%232563eb' stroke='%230f172a' stroke-width='1.5'><path d='M12 19l7-7 3 3-7 7-3-3z'></path><path d='M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z'></path><path d='M2 2l7.586 7.586'></path></svg>") 0 0, pointer;
+}
+
+.theme-blue-corporate input,
+.theme-blue-corporate textarea {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 19l7-7 3 3-7 7-3-3z'></path><path d='M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z'></path><path d='M2 2l7.586 7.586'></path><circle cx='11' cy='11' r='2'></circle></svg>") 0 0, text;
+}
+
+.theme-blue-corporate input[type="text"] {
+    font-family: var(--font-mono, 'Courier New', monospace);
+    letter-spacing: -0.5px;
+}
+
+/* Button styling - sharp corners, uppercase, professional shadows */
+.theme-blue-corporate .btn-primary,
+.theme-blue-corporate button.btn-primary {
+    background: var(--primary, #0f172a);
+    border-radius: var(--radius-sm, 4px);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.15), 0 2px 4px -1px rgba(15, 23, 42, 0.1);
+    border: none;
+    font-family: var(--font-body, 'IBM Plex Sans', sans-serif);
+}
+
+.theme-blue-corporate .btn-primary:hover,
+.theme-blue-corporate button.btn-primary:hover {
+    background: var(--secondary, #334155);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.2), 0 4px 6px -2px rgba(15, 23, 42, 0.15);
+}
+
+/* User message styling - sharp corners */
+.theme-blue-corporate .chat-message-user {
+    background: var(--primary, #0f172a);
+    border-radius: var(--radius-sm, 4px);
+    font-weight: 500;
+    font-family: var(--font-body, 'IBM Plex Sans', sans-serif);
+}
+
+/* AI message styling - legal pad aesthetic with left border accent */
+.theme-blue-corporate .chat-message-ai {
+    background: var(--bg-card, #ffffff);
+    border-left: 4px solid var(--accent, #ca8a04);
+    border-radius: 0 var(--radius-sm, 4px) var(--radius-sm, 4px) 0;
+    font-family: 'Georgia', serif;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    padding-left: calc(var(--spacing-md, 1rem) + 8px);
+}
+
+/* Card styling - grid pattern background and sharp corners */
+.theme-blue-corporate .legal-border,
+.theme-blue-corporate .card {
+    border: 1px solid var(--border, #e2e8f0);
+    border-top: 4px solid var(--primary, #0f172a);
+    border-radius: var(--radius-sm, 4px);
+    background-color: var(--bg-card, #ffffff);
+    background-image: 
+        linear-gradient(var(--border, #e2e8f0) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border, #e2e8f0) 1px, transparent 1px);
     background-size: 20px 20px;
     background-position: center center;
 }
 
-.professional-shadow {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+/* Professional shadows for depth */
+.theme-blue-corporate .professional-shadow {
+    box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -2px rgba(15, 23, 42, 0.05);
 }
 
-/* Animations */
-@keyframes pop-in {
-    0% { opacity: 0; transform: translateY(10px) scale(0.95); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
+/* Apply IBM Plex Sans consistently throughout */
+.theme-blue-corporate h1,
+.theme-blue-corporate h2,
+.theme-blue-corporate h3,
+.theme-blue-corporate h4,
+.theme-blue-corporate h5,
+.theme-blue-corporate h6,
+.theme-blue-corporate p,
+.theme-blue-corporate div,
+.theme-blue-corporate span,
+.theme-blue-corporate button,
+.theme-blue-corporate input:not([type="text"]) {
+    font-family: var(--font-body, 'IBM Plex Sans', sans-serif);
 }
 
-.animate-fade-in {
-    animation: pop-in 0.8s ease-out forwards;
+/* Sharp corners on all interactive elements */
+.theme-blue-corporate input[type="file"],
+.theme-blue-corporate input[type="text"],
+.theme-blue-corporate textarea,
+.theme-blue-corporate select {
+    border-radius: var(--radius-sm, 4px);
 }
 
-/* Scrollbar */
+/* Enhanced professional shadows on cards and containers */
+.theme-blue-corporate main,
+.theme-blue-corporate .card,
+.theme-blue-corporate #chat-history {
+    box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -2px rgba(15, 23, 42, 0.05);
+}
+
+/* Grid pattern for main container */
+.theme-blue-corporate main {
+    background-image: 
+        linear-gradient(var(--border, #e2e8f0) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border, #e2e8f0) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: center center;
+}
+
+
+/* ========================================
+   SECTION 8: SCROLLBAR STYLING
+   ======================================== */
+
 ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
 }
+
 ::-webkit-scrollbar-track {
-    background: rgba(0,0,0,0.1); 
+    background: rgba(0, 0, 0, 0.1);
 }
+
 ::-webkit-scrollbar-thumb {
-    background: var(--border); 
-    border-radius: 4px;
+    background: var(--border, #e2e8f0);
+    border-radius: var(--radius-sm, 4px);
 }
+
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-dim); 
+    background: var(--text-dim, #64748b);
 }
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border, #e2e8f0) transparent;
+}
+
+
+/* ========================================
+   SECTION 9: ACCESSIBILITY
+   ======================================== */
+
+/* Focus indicators for keyboard navigation */
+*:focus-visible {
+    outline: 2px solid var(--accent, #ca8a04);
+    outline-offset: 2px;
+}
+
+/* Skip to main content link */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary, #0f172a);
+    color: white;
+    padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+    text-decoration: none;
+    z-index: 100;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Screen reader only content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+
+/* ========================================
+   SECTION 10: PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/* CSS Containment for performance */
+.chat-message,
+.card,
+.btn-primary {
+    contain: layout style paint;
+}
+
+/* Will-change for animated elements (use sparingly) */
+.btn-primary:hover,
+.animate-fade-in {
+    will-change: transform, opacity;
+}
+
+/* Remove will-change after animation completes */
+.animation-complete {
+    will-change: auto;
+}
+
+/* GPU acceleration for transforms */
+.chat-message,
+.btn-primary {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+
+/* ========================================
+   SECTION 11: DECORATIVE SIDE ELEMENTS
+   ======================================== */
+
+/* Base side decoration positioning */
+.side-decoration {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    width: 200px;
+    pointer-events: none;
+    z-index: 10;
+    background: transparent;
+}
+
+.left-decoration {
+    left: 0;
+}
+
+.right-decoration {
+    right: 0;
+}
+
+/* Hide on mobile and tablet */
+@media (max-width: 1399px) {
+    .side-decoration {
+        display: none;
+    }
+}
+
+/* Adjust for medium-large screens */
+@media (min-width: 1400px) and (max-width: 1599px) {
+    .side-decoration {
+        width: 150px;
+    }
+}
+
+/* ========================================
+   SVG GOOEY FILTER BLOOD DRIP - Most Realistic
+   ======================================== */
+
+/* Container with gooey filter - creates liquid merging effect */
+.theme-dark-gothic .blood-drip-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    filter: url('#blood-goo');
+    -webkit-filter: url('#blood-goo');
+    pointer-events: none;
+    z-index: 5;
+    contain: layout style paint;
+    will-change: transform, opacity;
+}
+
+/* Blood drip with gooey effect */
+.theme-dark-gothic .blood-drip-container .blood-drip {
+    position: absolute;
+    width: 14px;
+    background: #8b0000;
+    border-radius: 50%;
+    top: -100px;
+    animation: blood-gooey-fall 7s ease-in infinite;
+    opacity: 0;
+}
+
+/* Top bulb - larger pooling area */
+.theme-dark-gothic .blood-drip-container .blood-drip::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -8px;
+    width: 30px;
+    height: 35px;
+    background: #8b0000;
+    border-radius: 50%;
+}
+
+/* Bottom droplet */
+.theme-dark-gothic .blood-drip-container .blood-drip::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: -5px;
+    width: 24px;
+    height: 30px;
+    background: #8b0000;
+    border-radius: 50%;
+}
+
+/* Staggered positioning and timing */
+.theme-dark-gothic .blood-drip-container .blood-drip:nth-child(1) { 
+    left: 15%; 
+    animation-delay: 0s;
+    animation-duration: 7s;
+}
+.theme-dark-gothic .blood-drip-container .blood-drip:nth-child(2) { 
+    left: 35%; 
+    animation-delay: 1.8s;
+    animation-duration: 8s;
+    width: 12px;
+}
+.theme-dark-gothic .blood-drip-container .blood-drip:nth-child(3) { 
+    left: 55%; 
+    animation-delay: 3.5s;
+    animation-duration: 6.5s;
+    width: 16px;
+}
+.theme-dark-gothic .blood-drip-container .blood-drip:nth-child(4) { 
+    left: 70%; 
+    animation-delay: 5s;
+    animation-duration: 7.5s;
+    width: 11px;
+}
+.theme-dark-gothic .blood-drip-container .blood-drip:nth-child(5) { 
+    left: 85%; 
+    animation-delay: 2.2s;
+    animation-duration: 9s;
+    width: 13px;
+}
+
+/* Gooey fall animation with gravity acceleration */
+@keyframes blood-gooey-fall {
+    0% {
+        top: -100px;
+        height: 25px;
+        opacity: 0;
+    }
+    5% {
+        opacity: 1;
+    }
+    10% {
+        top: -20px;
+        height: 60px;
+    }
+    25% {
+        top: 15vh;
+        height: 90px;
+    }
+    50% {
+        top: 45vh;
+        height: 120px;
+    }
+    75% {
+        top: 75vh;
+        height: 140px;
+        opacity: 0.9;
+    }
+    90% {
+        top: 92vh;
+        height: 100px;
+        opacity: 0.5;
+    }
+    100% {
+        top: 105vh;
+        height: 60px;
+        opacity: 0;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .theme-dark-gothic .blood-drip-container .blood-drip {
+        animation: none !important;
+        opacity: 0.7;
+        top: 20vh;
+        height: 80px;
+    }
+}
+
+/* Blood splatter decorations */
+.theme-dark-gothic .blood-splatter {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    animation: splatter-appear 12s ease-in-out infinite;
+}
+
+.theme-dark-gothic .blood-splatter::before {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: radial-gradient(circle, rgba(139, 0, 0, 0.7) 0%, rgba(139, 0, 0, 0.4) 50%, transparent 80%);
+    border-radius: 50% 40% 60% 45%;
+    filter: blur(1px);
+}
+
+.theme-dark-gothic .blood-splatter::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 10px;
+    width: 15px;
+    height: 15px;
+    background: radial-gradient(circle, rgba(139, 0, 0, 0.6) 0%, rgba(139, 0, 0, 0.3) 50%, transparent 80%);
+    border-radius: 45% 50% 40% 60%;
+    filter: blur(1px);
+}
+
+@keyframes splatter-appear {
+    0%, 90%, 100% {
+        opacity: 0;
+        transform: scale(0.5) rotate(0deg);
+    }
+    5% {
+        opacity: 0.8;
+        transform: scale(1.2) rotate(10deg);
+    }
+    10%, 85% {
+        opacity: 0.6;
+        transform: scale(1) rotate(5deg);
+    }
+}
+
+/* Professional Blue Theme - Legal Icon Decorations */
+.theme-blue-corporate .legal-icon {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0.18;
+    filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.1));
+    animation: subtle-float 8s ease-in-out infinite;
+    color: var(--primary);
+}
+
+.theme-blue-corporate .legal-icon:nth-child(2n) {
+    animation-delay: 2s;
+}
+
+.theme-blue-corporate .legal-icon:nth-child(3n) {
+    animation-delay: 4s;
+}
+
+@keyframes subtle-float {
+    0%, 100% {
+        transform: translateY(0px);
+        opacity: 0.15;
+    }
+    50% {
+        transform: translateY(-10px);
+        opacity: 0.25;
+    }
+}
+
+/* Emoji decorations removed - now using blood drips and legal icons in HTML */

@@ -1,21 +1,17 @@
-import sys
-import os
+"""Configuration for App 2: The Ouija Board"""
 
-# Add the parent directory to sys.path so we can find 'skeleton_core'
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from dotenv import load_dotenv
-from skeleton_core.app import create_app
-from app_legal.config import Config
-
-# Load env vars (API keys)
-load_dotenv()
-
-# Initialize the Legal App
-app = create_app(Config)
-
-if __name__ == '__main__':
-    print(f"🏛️  Starting {Config.APP_NAME}...")
-    print(f"🚀 Server running at http://127.0.0.1:5001")
-    # Run on Port 5001 to distinguish it
-    app.run(debug=True, host='0.0.0.0', port=5001)
+class Config:
+    APP_NAME = "Ouija Board 🔮"
+    THEME_CSS = "dark-gothic"
+    
+    SYSTEM_PROMPT = """
+    You are the 'Spirit of the Ouija Board', a mystical entity that communes with documents from beyond the veil.
+    
+    RULES:
+    1. You MUST answer based on the provided CONTEXT INFORMATION from the summoned documents.
+    2. If the answer is not in the text, state "The spirits are silent on this matter..."
+    3. Use mysterious, atmospheric language with gothic flair.
+    4. Reference the "ancient texts" or "forbidden knowledge" when citing the context.
+    5. You may use mystical emojis sparingly (🔮, 💀, 👻, 🕯️).
+    6. Speak as if channeling knowledge from another realm.
+    """

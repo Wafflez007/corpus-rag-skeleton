@@ -1,9 +1,9 @@
 """Flask application factory for the RAG skeleton"""
 
-import os
+import json
 import google.generativeai as genai
-from flask import Flask, render_template, request, jsonify
-from typing import Any
+from flask import Flask, render_template, request, jsonify, Response, stream_with_context
+from typing import Any, Generator
 from pypdf import PdfReader
 from .vector_store import VectorStore
 
@@ -32,7 +32,7 @@ def create_app(config: Any) -> Flask:
     
     @app.route('/upload', methods=['POST'])
     def upload():
-        """Handle document upload and vectorization"""
+        """Handle document upload and vectorization with SSE progress"""
         if 'file' not in request.files:
             return jsonify({'error': 'No file part'}), 400
         
@@ -40,45 +40,63 @@ def create_app(config: Any) -> Flask:
         if file.filename == '':
             return jsonify({'error': 'No selected file'}), 400
 
-        try:
-            file_data = [] # List to hold text + page info
-            
-            # Handle PDF files
-            if file.filename.lower().endswith('.pdf'):
-                pdf = PdfReader(file.stream)
-                for i, page in enumerate(pdf.pages):
-                    text = page.extract_text()
-                    if text.strip():
-                        # Store text with its page number (i+1)
-                        file_data.append({'text': text, 'page': i + 1})
-            
-            # Handle Text files (Treat as Page 1)
-            elif file.filename.lower().endswith('.txt'):
-                text = file.read().decode('utf-8')
-                file_data.append({'text': text, 'page': 1})
-            else:
-                return jsonify({'error': 'Unsupported file type. Use PDF or TXT'}), 400
+        def generate_progress() -> Generator[str, None, None]:
+            """Generate SSE progress updates"""
+            try:
+                # Stage 1: Reading file (0-20%)
+                yield f"data: {json.dumps({'progress': 10, 'stage': 'reading'})}\n\n"
+                
+                file_data = []
+                
+                # Handle PDF files
+                if file.filename.lower().endswith('.pdf'):
+                    yield f"data: {json.dumps({'progress': 20, 'stage': 'parsing'})}\n\n"
+                    pdf = PdfReader(file.stream)
+                    total_pages = len(pdf.pages)
+                    
+                    for i, page in enumerate(pdf.pages):
+                        text = page.extract_text()
+                        if text.strip():
+                            file_data.append({'text': text, 'page': i + 1})
+                        
+                        # Update progress for each page (20-50%)
+                        progress = 20 + int((i + 1) / total_pages * 30)
+                        yield f"data: {json.dumps({'progress': progress, 'stage': 'parsing'})}\n\n"
+                
+                # Handle Text files
+                elif file.filename.lower().endswith('.txt'):
+                    yield f"data: {json.dumps({'progress': 30, 'stage': 'parsing'})}\n\n"
+                    text = file.read().decode('utf-8')
+                    file_data.append({'text': text, 'page': 1})
+                    yield f"data: {json.dumps({'progress': 50, 'stage': 'parsing'})}\n\n"
+                else:
+                    yield f"data: {json.dumps({'error': 'Unsupported file type'})}\n\n"
+                    return
 
-            if not file_data:
-                return jsonify({'error': 'File appears empty or unreadable'}), 400
+                if not file_data:
+                    yield f"data: {json.dumps({'error': 'File appears empty'})}\n\n"
+                    return
 
-            # Ingest into the Brain using the new list format
-            num_chunks = vector_store.ingest_document(
-                file_data=file_data, 
-                document_id=file.filename, 
-                metadata={} # Source is handled inside ingest_document now
-            )
+                # Stage 2: Vectorizing (50-90%)
+                yield f"data: {json.dumps({'progress': 60, 'stage': 'vectorizing'})}\n\n"
+                
+                num_chunks = vector_store.ingest_document(
+                    file_data=file_data, 
+                    document_id=file.filename, 
+                    metadata={}
+                )
+                
+                yield f"data: {json.dumps({'progress': 90, 'stage': 'finalizing'})}\n\n"
+                
+                # Stage 3: Complete (100%)
+                total_pages = len(file_data)
+                yield f"data: {json.dumps({'progress': 100, 'stage': 'complete', 'filename': file.filename, 'chunks_processed': num_chunks, 'pages': total_pages, 'message': f'Successfully memorized {num_chunks} fragments.'})}\n\n"
 
-            return jsonify({
-                'status': 'success', 
-                'filename': file.filename,
-                'chunks_processed': num_chunks,
-                'message': f'Successfully memorized {num_chunks} fragments.'
-            }), 200
+            except Exception as e:
+                print(f"Error processing file: {e}")
+                yield f"data: {json.dumps({'error': str(e)})}\n\n"
 
-        except Exception as e:
-            print(f"Error processing file: {e}")
-            return jsonify({'error': str(e)}), 500
+        return Response(stream_with_context(generate_progress()), mimetype='text/event-stream')
     
     @app.route('/chat', methods=['POST'])
     def chat():
