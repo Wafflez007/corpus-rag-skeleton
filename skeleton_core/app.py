@@ -129,6 +129,15 @@ def create_app(config: Any) -> Flask:
             
         # 1. Retrieve Context from Brain (with optional source filter)
         context_results = vector_store.search(query, n_results=3, filter_sources=selected_sources)
+        
+        # Filter results to only include truly relevant sources
+        # Only keep results within a reasonable distance threshold of the best match
+        if context_results and len(context_results) > 0:
+            best_distance = context_results[0].get('distance', 0)
+            # Keep results within 0.3 distance units of the best match
+            # This filters out weakly-related documents
+            context_results = [r for r in context_results if r.get('distance', 0) <= best_distance + 0.3]
+        
         context_text = "\n\n".join([r['text'] for r in context_results])
         
         # 2. Construct the Prompt

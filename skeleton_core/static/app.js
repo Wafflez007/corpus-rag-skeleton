@@ -583,10 +583,19 @@ function addSystemMessage(text) {
 /**
  * Adds source citations to the chat history
  * Displays document sources with page numbers
+ * Only shows sources that actually contained relevant information
  * 
- * @param {Array<{source: string, page: number}>} sources - Array of source objects
+ * @param {Array<{source: string, page: number}>} sources - Array of source objects from vector search results
  */
 function addSources(sources) {
+    // Filter out any empty or invalid sources
+    const validSources = sources.filter(s => s && s.source);
+    
+    // Don't show sources section if no valid sources exist
+    if (validSources.length === 0) {
+        return;
+    }
+    
     const isGhost = document.body.classList.contains('theme-dark-gothic');
     const div = document.createElement('div');
     div.className = "flex flex-col justify-start mb-4 ml-2 gap-2";
@@ -599,9 +608,10 @@ function addSources(sources) {
     const title = isGhost ? "👁️ ECHOS DETECTED:" : "⚖️ CITATION REFERENCE:";
     
     // Create a clean list of unique sources with page numbers
+    // Only includes sources that were actually retrieved by vector search
     const sourceMap = {};
-    sources.forEach(s => {
-        const name = s.source || "Unknown";
+    validSources.forEach(s => {
+        const name = s.source;
         if (!sourceMap[name]) sourceMap[name] = new Set();
         if (s.page) sourceMap[name].add(s.page);
     });
