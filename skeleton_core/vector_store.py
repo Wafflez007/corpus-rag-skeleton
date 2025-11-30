@@ -1,22 +1,30 @@
 """Vector store operations using ChromaDB"""
 
 import os
+import logging
 from typing import List, Dict, Any
 import chromadb
 from chromadb.config import Settings
 import google.generativeai as genai
 
+logger = logging.getLogger(__name__)
+
 
 class VectorStore:
     """Handles document chunking, embedding, and retrieval using ChromaDB"""
     
-    def __init__(self, collection_name: str = "documents"):
+    def __init__(self, collection_name: str = "documents", chunk_size: int = 500, chunk_overlap: int = 50):
         """
         Initialize ChromaDB client and collection.
         
         Args:
             collection_name: Name of the ChromaDB collection
+            chunk_size: Maximum characters per chunk
+            chunk_overlap: Number of overlapping characters between chunks
         """
+        self.chunk_size = chunk_size
+        self.chunk_overlap = chunk_overlap
+        
         self.client = chromadb.Client(Settings(
             persist_directory="./chroma_db",
             anonymized_telemetry=False
@@ -29,18 +37,22 @@ class VectorStore:
         # Configure Google Gemini
         genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
     
-    def chunk_text(self, text: str, chunk_size: int = 500, overlap: int = 50) -> List[str]:
+    def chunk_text(self, text: str, chunk_size: int = None, overlap: int = None) -> List[str]:
         """
         Split text into overlapping chunks.
         
         Args:
             text: Input text to chunk
-            chunk_size: Maximum characters per chunk
-            overlap: Number of overlapping characters between chunks
+            chunk_size: Maximum characters per chunk (uses instance default if None)
+            overlap: Number of overlapping characters between chunks (uses instance default if None)
             
         Returns:
             List of text chunks
         """
+        # Use instance defaults if not specified
+        chunk_size = chunk_size or self.chunk_size
+        overlap = overlap or self.chunk_overlap
+        
         chunks = []
         start = 0
         text_length = len(text)
@@ -86,7 +98,7 @@ class VectorStore:
 
         chunk_counter = 0
 
-        print(f"⚡ Processing {len(file_data)} pages for {document_id}...")
+        logger.info(f"Processing {len(file_data)} pages for document: {document_id}")
 
         for page_data in file_data:
             page_text = page_data['text']
@@ -122,6 +134,9 @@ class VectorStore:
                 documents=documents,
                 metadatas=metadatas
             )
+            logger.info(f"Successfully ingested {len(ids)} chunks from {document_id}")
+        else:
+            logger.warning(f"No chunks generated for document: {document_id}")
         
         return len(ids)
     

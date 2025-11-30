@@ -14,11 +14,12 @@ from app_legal.config import Config
 load_dotenv()
 
 if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
     print("⚖️  Starting Legal Eagle Application...")
     print(f"📋 App Name: {Config.APP_NAME}")
     print(f"🎨 Theme: {Config.THEME_CSS}")
     print(f"🤖 System Prompt: {Config.SYSTEM_PROMPT[:50]}...")
-    print(f"\n🚀 Server running at http://127.0.0.1:5000\n")
+    print(f"\n🚀 Server running on port {port}\n")
     
     app = create_app(Config)
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=port)

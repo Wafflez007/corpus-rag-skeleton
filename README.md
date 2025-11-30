@@ -157,8 +157,17 @@ The skeleton architecture makes it easy to add new AI personalities:
 2. **Add `config.py`**:
    ```python
    class Config:
+       # Branding
        APP_NAME = "Your App Name 🎯"
        THEME_CSS = "your-theme-class"
+       
+       # RAG Configuration (optional - uses defaults if omitted)
+       CHUNK_SIZE = 500              # Characters per chunk
+       CHUNK_OVERLAP = 50            # Overlap between chunks
+       TOP_K_RESULTS = 3             # Number of results to retrieve
+       RELEVANCE_THRESHOLD = 0.3     # Distance threshold for filtering
+       
+       # AI Personality
        SYSTEM_PROMPT = """
        Your personality instructions here.
        Define tone, style, and behavior.
