@@ -33,4 +33,7 @@ Thumbs.db
 .hypothesis/
 .pytest_cache/
 
+# Documentation
+docs/
+
 HACKATHON_SUBMISSION.md
