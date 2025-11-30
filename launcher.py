@@ -19,302 +19,300 @@ load_dotenv()
 # Create landing page app
 landing_app = Flask(__name__)
 
+# Enhanced Landing Page with Split-Screen Architecture
 LANDING_PAGE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Corpus - Choose Your Experience</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>Project Corpus | Select Domain</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Creepster&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --legal-blue: #0f172a;
+            --legal-gold: #c5a059;
+            --ghost-dark: #0a0118;
+            --ghost-glow: #b026ff;
+            --split-speed: 1000ms;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            position: relative;
-            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Hide scrollbars */
+            height: 100vh;
+            background: #111;
         }
-        
-        /* Animated background particles */
-        body::before {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
-            animation: float 20s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -30px) rotate(120deg); }
-            66% { transform: translate(-20px, 20px) rotate(240deg); }
-        }
-        
+
+        /* CONTAINER */
         .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            padding: 4rem 3rem;
-            border-radius: 30px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
-            max-width: 900px;
-            width: 90%;
             position: relative;
-            z-index: 1;
-            animation: slideUp 0.6s ease-out;
+            width: 100%;
+            height: 100%;
+            display: flex;
         }
-        
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .logo {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            animation: bounce 2s ease-in-out infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        h1 {
-            color: #1a1a2e;
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .subtitle {
-            color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 3rem;
-            font-weight: 400;
-        }
-        
-        .tagline {
-            color: #999;
-            font-size: 0.9rem;
-            margin-bottom: 2.5rem;
-            font-style: italic;
-        }
-        
-        .apps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .app-card {
+
+        /* SPLIT SECTIONS */
+        .split {
             position: relative;
-            color: white;
-            padding: 3rem 2rem;
-            border-radius: 20px;
-            text-decoration: none;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 50%;
+            height: 100%;
             overflow: hidden;
-            border: 2px solid transparent;
+            transition: width var(--split-speed) ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            cursor: pointer;
         }
-        
-        .app-card::before {
-            content: '';
+
+        /* BACKGROUND CONTENT LAYERS */
+        .bg-layer {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: inherit;
-            transition: transform 0.4s ease;
-            z-index: -1;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
-        
-        .app-card:hover::before {
-            transform: scale(1.05);
+
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            transform: translateY(0);
+            transition: transform var(--split-speed) ease-in-out;
+            padding: 2rem;
+            max-width: 600px;
         }
-        
-        .app-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        .app-card.legal {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        }
-        
-        .app-card.ghost {
-            background: linear-gradient(135deg, #2c003e 0%, #4a0e4e 100%);
-        }
-        
-        .app-icon {
+
+        /* HEADINGS & TEXT */
+        h1 {
             font-size: 4rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+        }
+
+        p.desc {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            opacity: 0; /* Hidden by default */
+            transform: translateY(20px);
+            transition: all 0.5s ease-in-out;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .btn {
             display: inline-block;
-            animation: iconFloat 3s ease-in-out infinite;
-        }
-        
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(5deg); }
-        }
-        
-        .app-card:hover .app-icon {
-            animation: iconSpin 0.6s ease-in-out;
-        }
-        
-        @keyframes iconSpin {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.2); }
-            100% { transform: rotate(360deg) scale(1); }
-        }
-        
-        .app-name {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.8rem;
-            letter-spacing: -0.5px;
-        }
-        
-        .app-desc {
-            font-size: 1rem;
-            opacity: 0.95;
-            line-height: 1.5;
-            font-weight: 400;
-        }
-        
-        .app-features {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 0.85rem;
-            opacity: 0.8;
-        }
-        
-        .cta {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.5rem 1.5rem;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .app-card:hover .cta {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-        
-        .footer {
             margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid #e0e0e0;
-            color: #999;
-            font-size: 0.85rem;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        /* --- LEGAL SIDE STYLING --- */
+        .split.legal {
+            background-color: var(--legal-blue);
+            color: #fff;
+            border-right: 2px solid var(--legal-gold);
+        }
+
+        /* Architectural Grid Pattern */
+        .split.legal .bg-layer {
+            background-image: 
+                linear-gradient(rgba(197, 160, 89, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(197, 160, 89, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: scrollGrid 60s linear infinite;
+        }
+
+        .split.legal h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--legal-gold);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .split.legal .icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.3));
+        }
+
+        .split.legal .btn {
+            border: 1px solid var(--legal-gold);
+            color: var(--legal-gold);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .split.legal:hover .btn {
+            background: var(--legal-gold);
+            color: var(--legal-blue);
+        }
+
+        /* --- GHOST SIDE STYLING --- */
+        .split.ghost {
+            background-color: var(--ghost-dark);
+            color: #e0e0e0;
+        }
+
+        /* Fog Animation */
+        .split.ghost .bg-layer {
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(75, 0, 130, 0.2), transparent 70%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
         }
         
-        .tech-badge {
-            display: inline-block;
-            margin: 0.5rem 0.3rem;
-            padding: 0.3rem 0.8rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 15px;
-            font-size: 0.75rem;
-            font-weight: 600;
+        .split.ghost::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, transparent 40%, rgba(176, 38, 255, 0.1) 100%);
+            animation: pulseGlow 4s ease-in-out infinite alternate;
         }
+
+        .split.ghost h1 {
+            font-family: 'Creepster', display;
+            letter-spacing: 3px;
+            color: #d8b4fe;
+            text-shadow: 0 0 15px var(--ghost-glow);
+        }
+
+        .split.ghost .icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .split.ghost .btn {
+            border: 1px solid #d8b4fe;
+            color: #d8b4fe;
+            background: rgba(10, 1, 24, 0.8);
+            box-shadow: 0 0 10px var(--ghost-glow);
+        }
+
+        .split.ghost:hover .btn {
+            background: #d8b4fe;
+            color: var(--ghost-dark);
+            box-shadow: 0 0 20px var(--ghost-glow);
+        }
+
+        /* --- INTERACTION CLASSES --- */
         
-        @media (max-width: 768px) {
-            .container {
-                padding: 2rem 1.5rem;
-            }
+        /* When hovering Left */
+        .hover-left .split.legal { width: 75%; }
+        .hover-left .split.ghost { width: 25%; }
+        
+        /* When hovering Right */
+        .hover-right .split.ghost { width: 75%; }
+        .hover-right .split.legal { width: 25%; }
+
+        /* Show details on active side */
+        .hover-left .split.legal .desc,
+        .hover-left .split.legal .btn,
+        .hover-right .split.ghost .desc,
+        .hover-right .split.ghost .btn {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.1s;
+        }
+
+        /* Dim passive side */
+        .hover-left .split.ghost h1,
+        .hover-left .split.ghost .icon { opacity: 0.5; transform: scale(0.8); }
+        .hover-right .split.legal h1,
+        .hover-right .split.legal .icon { opacity: 0.5; transform: scale(0.8); }
+
+        /* --- ANIMATIONS --- */
+        @keyframes scrollGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 1000px; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.7; }
+        }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media(max-width: 800px) {
+            .container { flex-direction: column; }
+            .split { width: 100% !important; height: 50%; }
             
-            h1 {
-                font-size: 2rem;
-            }
+            /* Mobile Hover Simulation (Click/Tap states) */
+            .split:hover { height: 60%; }
+            .split:not(:hover) { height: 40%; }
             
-            .apps {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .app-card {
-                padding: 2rem 1.5rem;
-            }
+            h1 { font-size: 2.5rem; }
+            .icon { font-size: 3rem; }
+            p.desc { display: none; } /* Hide description on mobile to save space */
+            .btn { opacity: 1; transform: translateY(0); margin-top: 1rem; padding: 0.8rem 1.5rem; }
         }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <div class="logo">🎭</div>
-        <h1>Project Corpus</h1>
-        <p class="subtitle">AI-Powered Document Intelligence with Personality</p>
-        <p class="tagline">Choose your experience and chat with your documents</p>
         
-        <div class="apps">
-            <a href="/legal/" class="app-card legal">
-                <div class="app-icon">⚖️</div>
-                <div class="app-name">Legal Eagle</div>
-                <div class="app-desc">Professional legal document analysis with precision and expertise</div>
-                <div class="app-features">
-                    📄 PDF & Text Support<br>
-                    🔍 Semantic Search<br>
-                    🤖 AI-Powered Insights
-                </div>
-                <div class="cta">Enter Legal Mode →</div>
-            </a>
-            
-            <a href="/ghost/" class="app-card ghost">
-                <div class="app-icon">👻</div>
-                <div class="app-name">Ouija Board</div>
-                <div class="app-desc">Mystical document consultation from beyond the veil</div>
-                <div class="app-features">
-                    🔮 Cryptic Wisdom<br>
-                    ✨ Ethereal Insights<br>
-                    🌙 Supernatural Analysis
-                </div>
-                <div class="cta">Summon the Spirits →</div>
-            </a>
-        </div>
-        
-        <div class="footer">
-            <div>
-                <span class="tech-badge">Flask</span>
-                <span class="tech-badge">ChromaDB</span>
-                <span class="tech-badge">Google Gemini</span>
-                <span class="tech-badge">RAG</span>
+        <!-- LEGAL SIDE -->
+        <a href="/legal/" class="split legal">
+            <div class="bg-layer"></div>
+            <div class="content">
+                <div class="icon">⚖️</div>
+                <h1>Legal Eagle</h1>
+                <p class="desc">
+                    Precision. Precedent. Professionalism.<br>
+                    Analyze contracts and case law with <br>rigorous semantic search.
+                </p>
+                <div class="btn">Access Counsel</div>
             </div>
-            <p style="margin-top: 1rem;">Powered by Retrieval Augmented Generation</p>
-        </div>
+        </a>
+
+        <!-- GHOST SIDE -->
+        <a href="/ghost/" class="split ghost">
+            <div class="bg-layer"></div>
+            <div class="content">
+                <div class="icon">🔮</div>
+                <h1>Ouija Board</h1>
+                <p class="desc">
+                    Consult the archives from beyond the veil.<br>
+                    Unearth hidden meanings and <br>cryptic connections.
+                </p>
+                <div class="btn">Summon Spirits</div>
+            </div>
+        </a>
+
     </div>
+
+    <script>
+        const container = document.querySelector('.container');
+        const legal = document.querySelector('.split.legal');
+        const ghost = document.querySelector('.split.ghost');
+
+        // Add hover classes to container for CSS width transitions
+        legal.addEventListener('mouseenter', () => container.classList.add('hover-left'));
+        legal.addEventListener('mouseleave', () => container.classList.remove('hover-left'));
+
+        ghost.addEventListener('mouseenter', () => container.classList.add('hover-right'));
+        ghost.addEventListener('mouseleave', () => container.classList.remove('hover-right'));
+    </script>
 </body>
 </html>
 """
