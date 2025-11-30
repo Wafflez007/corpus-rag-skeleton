@@ -74,14 +74,18 @@ Free hosting platforms typically don't provide persistent disk storage. Your vec
 ### Environment Variables
 Always set `GOOGLE_API_KEY` in your hosting platform's environment variables (never commit to Git).
 
-### Which App to Deploy?
-The default configuration deploys Legal Eagle (`app_legal`). To deploy Ghost mode instead:
-- Update `render.yaml` or start command to use `app_ghost/main.py`
+### Deploying Both Apps (Unified Launcher)
+The project includes `launcher.py` which runs both apps on one service:
+- **Landing page:** `https://yourapp.onrender.com/`
+- **Legal Eagle:** `https://yourapp.onrender.com/legal/`
+- **Ghost/Ouija:** `https://yourapp.onrender.com/ghost/`
 
-### Multiple Apps
-To run both apps simultaneously, you'll need:
-- Two separate deployments (one for each app)
-- Or modify the code to run both on different routes
+This is perfect for demos - one URL, two personalities!
+
+### Alternative: Deploy Individual Apps
+To deploy just one app, change the start command in `render.yaml`:
+- Legal only: `python app_legal/main.py`
+- Ghost only: `python app_ghost/main.py`
 
 ---
 
