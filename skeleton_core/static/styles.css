@@ -1347,17 +1347,65 @@ textarea {
     right: 0;
 }
 
-/* Hide on mobile and tablet */
-@media (max-width: 1399px) {
+/* Hide on mobile and small tablets only */
+@media (max-width: 1023px) {
     .side-decoration {
         display: none;
     }
 }
 
-/* Adjust for medium-large screens */
-@media (min-width: 1400px) and (max-width: 1599px) {
+/* Adjust for laptop screens (1024px - 1365px) */
+@media (min-width: 1024px) and (max-width: 1365px) {
     .side-decoration {
-        width: 150px;
+        width: 100px;
+    }
+    
+    /* Scale down emojis and blood for smaller laptops */
+    .theme-blue-corporate .legal-icon {
+        font-size: 1.5rem;
+    }
+    
+    .theme-dark-gothic .blood-drip-container .blood-drip {
+        width: 10px;
+    }
+}
+
+/* Standard laptop screens (1366px - 1599px) - like 1366x768 */
+@media (min-width: 1366px) and (max-width: 1599px) {
+    .side-decoration {
+        width: 120px;
+    }
+    
+    /* Slightly smaller decorations */
+    .theme-blue-corporate .legal-icon {
+        font-size: 1.8rem;
+    }
+    
+    .theme-dark-gothic .blood-drip-container .blood-drip {
+        width: 12px;
+    }
+}
+
+/* Large screens (1600px - 1919px) */
+@media (min-width: 1600px) and (max-width: 1919px) {
+    .side-decoration {
+        width: 180px;
+    }
+}
+
+/* Full HD and larger (1920px+) */
+@media (min-width: 1920px) {
+    .side-decoration {
+        width: 220px;
+    }
+    
+    /* Larger decorations for big screens */
+    .theme-blue-corporate .legal-icon {
+        font-size: 2.5rem;
+    }
+    
+    .theme-dark-gothic .blood-drip-container .blood-drip {
+        width: 16px;
     }
 }
 
@@ -1703,4 +1751,96 @@ textarea {
 /* Modal overlay prevents body scroll */
 body:has(.modal-overlay) {
     overflow: hidden;
+}
+
+/* ========================================
+   BACK TO LAUNCHER BUTTON
+   ======================================== */
+
+.back-to-launcher-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(10px);
+}
+
+.back-to-launcher-btn:hover {
+    transform: translateX(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent);
+}
+
+.back-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.back-to-launcher-btn:hover .back-arrow {
+    transform: translateX(-3px);
+}
+
+/* Theme-specific styling */
+.theme-dark-gothic .back-to-launcher-btn {
+    background: rgba(17, 10, 10, 0.9);
+    border-color: var(--primary);
+    color: var(--accent);
+    box-shadow: 0 0 20px rgba(139, 0, 0, 0.3);
+}
+
+.theme-dark-gothic .back-to-launcher-btn:hover {
+    background: rgba(43, 5, 5, 0.95);
+    box-shadow: 0 0 30px rgba(255, 63, 63, 0.5);
+    border-color: var(--accent);
+}
+
+.theme-blue-corporate .back-to-launcher-btn {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: var(--border);
+    color: var(--primary);
+}
+
+.theme-blue-corporate .back-to-launcher-btn:hover {
+    background: var(--bg-card);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Mobile responsive */
+@media (max-width: 767px) {
+    .back-to-launcher-btn {
+        top: 10px;
+        left: 10px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+    }
+    
+    .back-text {
+        display: none;
+    }
+    
+    .back-arrow {
+        font-size: 1.5rem;
+    }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .back-to-launcher-btn {
+        top: 15px;
+        left: 15px;
+    }
 }

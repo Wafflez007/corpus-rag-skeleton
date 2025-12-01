@@ -88,6 +88,12 @@
     </div>
     {% endif %}
 
+    <!-- Back to Launcher Button -->
+    <a href="/" class="back-to-launcher-btn">
+        <span class="back-arrow">←</span>
+        <span class="back-text">Back to Launcher</span>
+    </a>
+
     <!-- Header -->
     <header class="w-full max-w-7xl text-center mb-8 animate-fade-in">
         {% if theme == 'dark-gothic' %}
@@ -155,9 +161,6 @@
                             <span>📚</span> Library
                             {% endif %}
                         </h2>
-                        <button onclick="refreshDocuments()" class="text-xs px-2 py-1 rounded opacity-60 hover:opacity-100 transition-opacity" style="background: var(--bg-input);" title="Refresh document list">
-                            🔄
-                        </button>
                     </div>
                     <div id="document-list" class="space-y-2 max-h-[500px] overflow-y-auto rounded-lg p-3 mb-3" style="background: var(--bg-input); border: 1px solid var(--border);">
                         <div class="text-center text-xs opacity-40 py-8">
@@ -219,7 +222,7 @@
 
     <!-- Footer -->
     <footer class="mt-8 text-xs opacity-30 tracking-widest uppercase animate-fade-in" style="animation-delay: 0.4s; opacity: 0;">
-        Powered by Skeleton Core v1.0
+        Powered by {{ model_name if model_name else 'Gemini AI' }}
     </footer>
 
     <!-- ARIA Live Region for Screen Reader Announcements -->

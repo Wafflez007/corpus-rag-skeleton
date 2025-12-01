@@ -155,6 +155,9 @@ const uploadQueue = {
                                 chatHistory.innerHTML = '';
                             }
                             addSystemMessage("Document ingested. Memory updated.");
+                            
+                            // Auto-refresh document list after successful upload
+                            await refreshDocuments();
                         }
                     }
                 }

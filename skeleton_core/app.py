@@ -37,6 +37,9 @@ def create_app(config: Any) -> Flask:
         chunk_size=app.config['CHUNK_SIZE'],
         chunk_overlap=app.config['CHUNK_OVERLAP']
     )
+    
+    # Track the active Gemini model (will be set on first use)
+    app.config['ACTIVE_MODEL'] = None
 
     @app.route('/')
     def index():
@@ -44,7 +47,8 @@ def create_app(config: Any) -> Flask:
         return render_template(
             'index.html',
             app_name=app.config['APP_NAME'],
-            theme=app.config['THEME_CSS']
+            theme=app.config['THEME_CSS'],
+            model_name=app.config.get('ACTIVE_MODEL', 'Gemini AI')
         )
     
     @app.route('/upload', methods=['POST'])
@@ -188,12 +192,15 @@ def create_app(config: Any) -> Flask:
             ]
             
             response = None
+            used_model = None
             for model_name in candidates:
                 try:
                     logger.info(f"Trying model: {model_name}")
                     model = genai.GenerativeModel(model_name)
                     response = model.generate_content(full_prompt)
+                    used_model = model_name
                     logger.info(f"Successfully using model: {model_name}")
+                    app.config['ACTIVE_MODEL'] = model_name
                     break  # It worked! Exit loop
                 except Exception as e:
                     logger.debug(f"Model {model_name} failed: {e}")
@@ -207,6 +214,8 @@ def create_app(config: Any) -> Flask:
                         if 'flash' in m.name:  # Prefer flash
                             model = genai.GenerativeModel(m.name)
                             response = model.generate_content(full_prompt)
+                            used_model = m.name
+                            app.config['ACTIVE_MODEL'] = m.name
                             logger.info(f"Using fallback model: {m.name}")
                             break
             
@@ -216,6 +225,8 @@ def create_app(config: Any) -> Flask:
                     first_model = list(genai.list_models())[0].name
                     model = genai.GenerativeModel(first_model)
                     response = model.generate_content(full_prompt)
+                    used_model = first_model
+                    app.config['ACTIVE_MODEL'] = first_model
                     logger.info(f"Using last resort model: {first_model}")
                 except Exception as e:
                     logger.error(f"Critical Model Failure: {e}", exc_info=True)
