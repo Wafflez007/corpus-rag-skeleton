@@ -115,7 +115,7 @@ const uploadQueue = {
         updateProgress(0, 'reading');
 
         try {
-            const response = await fetch('/upload', {
+            const response = await fetch('upload', {
                 method: 'POST',
                 body: formData
             });
@@ -341,7 +341,7 @@ async function sendQuery() {
         // Get selected document sources for filtering
         const selectedSources = getSelectedSources();
         
-        const response = await fetch('/chat', {
+        const response = await fetch('chat', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -1268,7 +1268,7 @@ async function refreshDocuments() {
     const isGhost = document.body.classList.contains('theme-dark-gothic');
     
     try {
-        const response = await fetch('/documents');
+        const response = await fetch('documents');
         const data = await response.json();
         
         if (!data.documents || data.documents.length === 0) {
@@ -1347,7 +1347,7 @@ async function deleteDocument(source) {
         dangerous: true,
         onConfirm: async () => {
             try {
-                const response = await fetch(`/documents/${encodeURIComponent(source)}`, {
+                const response = await fetch(`documents/${encodeURIComponent(source)}`, {
                     method: 'DELETE'
                 });
                 
