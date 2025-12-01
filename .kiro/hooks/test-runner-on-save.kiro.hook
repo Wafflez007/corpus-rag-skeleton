@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "Run Tests on Python Save",
+  "description": "Automatically runs pytest when Python files are saved to catch issues early",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "skeleton_core/**/*.py",
+      "app_legal/**/*.py",
+      "app_ghost/**/*.py",
+      "tests/**/*.py"
+    ]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "pytest --tb=short -q"
+  }
+}

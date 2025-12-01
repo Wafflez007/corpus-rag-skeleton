@@ -1,0 +1,16 @@
+{
+  "enabled": false,
+  "name": "README Update Reminder",
+  "description": "OPTIONAL: Reminds to update README when new app modes are added",
+  "version": "1",
+  "when": {
+    "type": "fileCreated",
+    "patterns": [
+      "app_*/main.py"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A new app mode was just created. Remind the user to update README.md with the new app's name, port, and description."
+  }
+}

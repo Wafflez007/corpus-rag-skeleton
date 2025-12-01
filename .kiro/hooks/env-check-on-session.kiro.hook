@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Check Environment on Session Start",
+  "description": "Verifies GOOGLE_API_KEY is set when starting a new session",
+  "version": "1",
+  "when": {
+    "type": "sessionStart"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Check if .env file exists and contains GOOGLE_API_KEY. If missing or empty, warn the user that the app won't work without it."
+  }
+}

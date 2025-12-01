@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Validate App Config on Save",
+  "description": "Validates that config.py files have all required fields when saved",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "app_*/config.py"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Check the saved config.py file and verify it has ALL required fields:\n- APP_NAME (string)\n- THEME_CSS (string)\n- SYSTEM_PROMPT (string)\n- CHUNK_SIZE (int, default 500)\n- CHUNK_OVERLAP (int, default 50)\n- TOP_K_RESULTS (int, default 3)\n- RELEVANCE_THRESHOLD (float, default 0.3)\n\nIf any are missing, briefly list what's missing. If all present, confirm it's valid."
+  }
+}

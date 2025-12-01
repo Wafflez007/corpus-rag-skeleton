@@ -9,6 +9,11 @@ This is "Project Corpus" - a RAG (Retrieval Augmented Generation) web applicatio
 - Configurable AI personalities via system prompts
 - Theme-based UI customization
 - Page-aware document chunking with source tracking
+- Document management (list uploaded documents, delete specific documents)
+- Real-time upload progress tracking via Server-Sent Events
+- Optional source filtering for targeted queries
+- Relevance-based result filtering to exclude weakly-related documents
+- Robust AI model selection with automatic fallback
 
 ## Application Modes
 

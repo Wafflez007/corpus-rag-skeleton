@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Vector Store Health Check",
+  "description": "Checks if ChromaDB is accessible when vector_store.py is modified",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "skeleton_core/vector_store.py"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "The vector_store.py file was just modified. Run a quick syntax check using getDiagnostics. If there are errors, list them. If clean, confirm the file is valid."
+  }
+}

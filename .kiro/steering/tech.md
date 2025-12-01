@@ -2,20 +2,22 @@
 
 ## Core Technologies
 
-- **Language:** Python 3.10+
-- **Web Framework:** Flask 3.0.0 with Jinja2 templating
-- **Vector Database:** ChromaDB 0.5.0 (local, persisted to `./chroma_db`)
+- **Language:** Python 3.10+ (tested on 3.13.6)
+- **Web Framework:** Flask 3.1.0 with Jinja2 templating
+- **Vector Database:** ChromaDB 0.5.20 (local, persisted to `./chroma_db`)
 - **AI Services:** Google Gemini API (generative AI + embeddings)
 - **Frontend:** HTML with custom CSS (no framework)
 
 ## Key Dependencies
 
 Dependencies are managed in `requirements.txt`:
-- `Flask==3.0.0` - Web server
-- `google-generativeai==0.3.0` - Gemini AI integration
-- `chromadb==0.5.0` - Vector database
-- `PyPDF2==3.0.0` - PDF processing (imported as `pypdf`)
-- `python-dotenv==1.0.0` - Environment variable management
+- `Flask==3.1.0` - Web server
+- `google-generativeai==0.8.3` - Gemini AI integration
+- `chromadb==0.5.20` - Vector database
+- `pypdf==5.1.0` - PDF processing
+- `python-dotenv==1.0.1` - Environment variable management
+- `pytest==7.4.3` - Testing framework
+- `hypothesis==6.92.1` - Property-based testing
 
 ## Common Commands
 

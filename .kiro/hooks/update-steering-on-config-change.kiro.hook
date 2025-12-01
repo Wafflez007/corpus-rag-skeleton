@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Update Steering When Config Changes",
+  "description": "Reminds to update personalities.md when app configs are modified",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "app_*/config.py"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A config file was just modified. Check if the SYSTEM_PROMPT or APP_NAME changed significantly. If so, remind the user to update .kiro/steering/personalities.md to reflect the new personality."
+  }
+}

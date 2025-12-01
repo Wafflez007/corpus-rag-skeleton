@@ -5,9 +5,9 @@ A polished, production-ready RAG (Retrieval Augmented Generation) web applicatio
 ## ✨ Key Features
 
 ### Core Functionality
-- � **Multib-format document support** - Upload and chat with text/PDF documents
+- 📄 **Multi-format document support** - Upload and chat with text/PDF documents
 - 🔍 **Semantic search** - Vector-based retrieval using ChromaDB with Gemini embeddings
-- � T**Smart source attribution** - Relevance-filtered citations showing only documents that actually contain answers
+- 🎯 **Smart source attribution** - Relevance-filtered citations showing only documents that actually contain answers
 - 📑 **Page-aware chunking** - Track exact page numbers for precise source references
 - 📚 **Document library** - Manage multiple documents with selective filtering
 
@@ -116,12 +116,39 @@ Then open your browser to `http://localhost:5000` or `http://localhost:5001`
 ```
 skeleton_core/       # Reusable RAG core
 ├── app.py          # Flask routes and app factory
-├── vector_store.py # ChromaDB operations
+├── vector_store.py # ChromaDB operations (ingest, search, delete)
 ├── templates/      # Jinja2 templates
-└── static/         # CSS and JavaScript
+│   └── index.html  # Main chat interface
+└── static/         # Frontend assets
+    ├── styles.css  # Theme-aware CSS
+    ├── app.js      # Client-side JavaScript
+    ├── favicon-legal.svg
+    ├── favicon-ghost.svg
+    └── sounds/     # Audio assets
 
 app_legal/          # Legal Eagle configuration
+├── config.py       # Legal mode settings
+├── main.py         # Entry point (port 5000)
+└── __init__.py
+
 app_ghost/          # Ghost/Ouija configuration
+├── config.py       # Ghost mode settings
+├── main.py         # Entry point (port 5001)
+└── __init__.py
+
+tests/              # Comprehensive test suite
+.kiro/              # Kiro IDE configuration
+├── steering/       # Project documentation
+│   ├── tech.md
+│   ├── structure.md
+│   ├── product.md
+│   └── personalities.md
+├── hooks/          # Automated workflows
+└── spec.md         # Project specification
+
+launcher.py         # Multi-app launcher for deployment
+Procfile            # Render.com deployment config
+render.yaml         # Render service configuration
 ```
 
 ### Smart Source Attribution
@@ -231,23 +258,23 @@ pytest -v tests/
 ## 📚 Tech Stack
 
 **Backend:**
-- Python 3.10+
-- Flask 3.0.0 - Web framework with Jinja2 templating
-- ChromaDB 0.5.0 - Vector database with cosine similarity
-- Google Gemini API - AI generation (`gemini-1.5-flash`) and embeddings (`text-embedding-004`)
-- PyPDF2 3.0.0 - PDF text extraction
-- python-dotenv 1.0.0 - Environment variable management
+- Python 3.10+ (tested on 3.13.6)
+- Flask 3.1.0 - Web framework with Jinja2 templating
+- ChromaDB 0.5.20 - Vector database with cosine similarity
+- Google Gemini API 0.8.3 - AI generation (`gemini-1.5-flash`) and embeddings (`text-embedding-004`)
+- pypdf 5.1.0 - PDF text extraction
+- python-dotenv 1.0.1 - Environment variable management
 
 **Frontend:**
 - Vanilla JavaScript - No framework dependencies
-- Tailwind CSS (CDN) - Utility-first styling
-- CSS Custom Properties - Theme variables
+- Custom CSS - Theme-based styling with CSS variables
+- CSS Custom Properties - Theme variables for easy customization
 - Server-Sent Events (SSE) - Real-time upload progress
 - Web Audio API - Sound effects
 
 **Testing:**
-- pytest - Test framework
-- Hypothesis - Property-based testing
+- pytest 7.4.3 - Test framework
+- Hypothesis 6.92.1 - Property-based testing
 
 ## 🎯 Project Highlights
 
@@ -258,10 +285,32 @@ pytest -v tests/
 - **Comprehensive testing** - property-based tests ensure UI reliability
 - **Theme system** - CSS variables enable complete visual customization
 - **Audio integration** - personality-specific sound design
+- **Kiro IDE hooks** - Automated validation and testing on file save
+- **Deployment ready** - Configured for Render.com with Procfile and launcher script
 
 ## 📝 License
 
 MIT
+
+## 🚢 Deployment
+
+The project is configured for deployment on Render.com:
+
+1. **Environment Variables**: Set `GOOGLE_API_KEY` in Render dashboard
+2. **Build Command**: `pip install -r requirements.txt`
+3. **Start Command**: `python launcher.py` (runs both apps on dynamic ports)
+
+The `launcher.py` script automatically detects the PORT environment variable and runs the appropriate app mode.
+
+## 🎮 Kiro IDE Hooks
+
+The project includes automated workflows for development:
+
+- **config-validator** - Validates config.py files have all required fields
+- **env-check-on-session** - Verifies GOOGLE_API_KEY on session start
+- **test-runner-on-save** - Runs pytest automatically when Python files are saved
+- **update-steering-on-config-change** - Reminds to update documentation when configs change
+- **vector-store-health-check** - Runs diagnostics on vector_store.py changes
 
 ## 🤝 Contributing
 
@@ -270,4 +319,4 @@ Contributions welcome! Areas for expansion:
 - Additional document formats (DOCX, Markdown, HTML)
 - Advanced RAG features (multi-query, re-ranking, citations in text)
 - UI enhancements (dark mode toggle, custom themes, mobile gestures)
-- Deployment guides (Docker, cloud platforms)
+- Additional deployment targets (Docker, AWS, Azure)
