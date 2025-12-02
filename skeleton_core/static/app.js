@@ -431,81 +431,50 @@ function scrollToBottom() {
 
 /**
  * Adds a message to the chat history
- * Handles both user and AI messages with distinct styling
+ * Handles both user and AI messages with distinct styling using DaisyUI chat components
  * Implements typewriter effect for AI messages
  * 
  * @param {string} text - The message text to display
  * @param {'user'|'ai'} type - The type of message (user or ai)
  */
 function addMessage(text, type) {
-    const div = document.createElement('div');
-    div.className = `flex ${type === 'user' ? 'justify-end' : 'justify-start'} chat-message animate-pop-in`;
-    
-    // Distinct CSS classes for user vs AI messages
-    let contentClass = type === 'user' 
-        ? 'chat-message-user text-white px-5 py-3 rounded-2xl rounded-tr-none shadow-lg' 
-        : 'chat-message-ai px-5 py-3 rounded-2xl rounded-tl-none shadow-md';
-    
-    // Create message container with proper structure
-    const messageContainer = document.createElement('div');
     const isGhost = document.body.classList.contains('theme-dark-gothic');
     
-    messageContainer.className = type === 'user' 
-        ? 'flex items-start gap-2 flex-row-reverse max-w-[80%]'
-        : 'flex items-start gap-2 max-w-[80%]';
+    // Create DaisyUI chat component
+    const chatDiv = document.createElement('div');
+    chatDiv.className = `chat ${type === 'user' ? 'chat-end' : 'chat-start'} opacity-0 scale-95 animate-[pop-in_0.3s_cubic-bezier(0.25,0.46,0.45,0.94)_both] motion-reduce:animate-none motion-reduce:opacity-100 motion-reduce:scale-100`;
     
-    // Add icon/avatar for both user and AI messages
-    const icon = document.createElement('span');
-    icon.className = 'message-icon text-xl flex-shrink-0';
+    // Add chat bubble with DaisyUI classes
+    const bubbleDiv = document.createElement('div');
+    bubbleDiv.className = type === 'user' 
+        ? 'chat-bubble chat-bubble-primary text-sm leading-relaxed'
+        : 'chat-bubble text-sm leading-relaxed';
     
-    if (type === 'ai') {
-        icon.setAttribute('aria-label', 'AI response');
-        icon.textContent = isGhost ? '🔮' : '⚖️';
-    } else {
-        icon.setAttribute('aria-label', 'User message');
-        icon.textContent = isGhost ? '👤' : '👤';
-    }
+    bubbleDiv.style.wordBreak = 'break-word';
+    bubbleDiv.style.whiteSpace = 'pre-wrap';
     
-    messageContainer.appendChild(icon);
-    
-    // Create content wrapper
-    const contentWrapper = document.createElement('div');
-    contentWrapper.className = 'flex flex-col';
-    
-    // Create content div with proper styling
-    const contentDiv = document.createElement('div');
-    contentDiv.className = `${contentClass} text-sm leading-relaxed`;
-    contentDiv.style.wordBreak = 'break-word';
-    contentDiv.style.whiteSpace = 'pre-wrap';
-    contentDiv.style.display = 'block';
-    
-    // Add timestamp (optional, non-intrusive)
+    // Add timestamp
     const timestamp = new Date();
     const timeString = timestamp.toLocaleTimeString('en-US', { 
         hour: '2-digit', 
         minute: '2-digit' 
     });
     
-    const timestampDiv = document.createElement('div');
-    timestampDiv.className = 'message-timestamp text-xs opacity-50 mt-1';
-    timestampDiv.textContent = timeString;
-    timestampDiv.setAttribute('aria-label', `Message sent at ${timeString}`);
+    const timeDiv = document.createElement('div');
+    timeDiv.className = 'chat-footer opacity-50 text-xs mt-1';
+    timeDiv.textContent = timeString;
+    timeDiv.setAttribute('aria-label', `Message sent at ${timeString}`);
     
     // Assemble the structure
-    contentWrapper.appendChild(contentDiv);
-    contentWrapper.appendChild(timestampDiv);
-    messageContainer.appendChild(contentWrapper);
-    div.appendChild(messageContainer);
-    
-    // Immediate display of user messages
-    chatHistory.appendChild(div);
+    chatDiv.appendChild(bubbleDiv);
+    chatDiv.appendChild(timeDiv);
+    chatHistory.appendChild(chatDiv);
     
     if (type === 'ai') {
         // Play response sound when AI starts answering
         audioManager.playResponseSound();
         
         // Determine speed based on theme (Ghost = Slow, Legal = Fast)
-        const isGhost = document.body.classList.contains('theme-dark-gothic');
         const speed = isGhost ? 50 : 10; 
         
         let i = 0;
@@ -524,14 +493,14 @@ function addMessage(text, type) {
                         codeSpan.className = 'font-mono bg-opacity-20 px-1 rounded';
                         codeSpan.style.backgroundColor = 'var(--border)';
                         codeSpan.textContent = codeText;
-                        contentDiv.appendChild(codeSpan);
+                        bubbleDiv.appendChild(codeSpan);
                         i = nextBacktick + 1;
                     } else {
-                        contentDiv.innerHTML += char;
+                        bubbleDiv.innerHTML += char;
                         i++;
                     }
                 } else {
-                    contentDiv.innerHTML += char;
+                    bubbleDiv.innerHTML += char;
                     i++;
                 }
                 
@@ -547,7 +516,7 @@ function addMessage(text, type) {
         typeWriter();
     } else {
         // Immediate display with proper text wrapping and escaping
-        contentDiv.innerHTML = formatMessageText(text);
+        bubbleDiv.innerHTML = formatMessageText(text);
     }
     
     // Auto-scroll to show latest message
@@ -642,29 +611,20 @@ function addSources(sources) {
 
 /**
  * Shows a loading indicator in the chat area during AI response generation
- * Creates a typing indicator with animated dots
+ * Uses DaisyUI loading component with animated dots
  * @returns {string} The ID of the loading indicator element
  */
 function showLoading() {
     const id = 'loading-' + Date.now();
     const div = document.createElement('div');
     div.id = id;
-    div.className = "flex justify-start chat-message loading-indicator";
-    div.style.opacity = '0';
+    div.className = "flex justify-start chat-message loading-indicator opacity-0 animate-[fade-in_0.3s_ease-in_forwards] motion-reduce:animate-none motion-reduce:opacity-100";
     div.innerHTML = `
         <div class="chat-message-ai px-4 py-3 rounded-2xl rounded-tl-none max-w-[80%] flex gap-2 items-center">
-            <div class="w-2 h-2 bg-[var(--accent)] rounded-full animate-bounce"></div>
-            <div class="w-2 h-2 bg-[var(--accent)] rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-            <div class="w-2 h-2 bg-[var(--accent)] rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+            <span class="loading loading-dots loading-sm"></span>
         </div>
     `;
     chatHistory.appendChild(div);
-    
-    // Smooth fade-in transition
-    setTimeout(() => {
-        div.style.transition = 'opacity 0.3s ease-in';
-        div.style.opacity = '1';
-    }, 10);
     
     scrollToBottom();
     return id;
@@ -711,7 +671,7 @@ function showStatus(text, type) {
 
 /**
  * Displays upload success feedback with document details
- * Shows theme-appropriate success message with filename and page count
+ * Uses DaisyUI alert component with theme-appropriate styling
  * Auto-dismisses after 5 seconds
  * 
  * @param {string} filename - The name of the uploaded file
@@ -723,22 +683,19 @@ function showUploadSuccess(filename, pageCount) {
     // Theme-appropriate success messages with page count
     const pageText = pageCount === 1 ? 'page' : 'pages';
     const message = isGhost
-        ? `✨ The spirits have accepted "${filename}". ${pageCount} ${pageText} absorbed into the void.`
-        : `✓ Document "${filename}" successfully processed. ${pageCount} ${pageText} indexed.`;
+        ? `The spirits have accepted "${filename}". ${pageCount} ${pageText} absorbed into the void.`
+        : `Document "${filename}" successfully processed. ${pageCount} ${pageText} indexed.`;
     
-    // Create success message element
+    // Create DaisyUI alert component
     const successDiv = document.createElement('div');
     successDiv.className = 'upload-feedback success-message';
     successDiv.innerHTML = `
-        <div class="flex items-start gap-3 p-4 rounded-lg shadow-lg animate-fade-in" 
-             style="background: ${isGhost ? 'rgba(139, 0, 0, 0.2)' : 'rgba(34, 197, 94, 0.1)'}; 
-                    border: 1px solid ${isGhost ? 'var(--accent)' : '#22c55e'};">
+        <div class="alert alert-success opacity-0 animate-[fade-in_0.8s_ease-out_forwards] motion-reduce:animate-none motion-reduce:opacity-100" 
+             role="alert">
             <span class="text-xl">${isGhost ? '🔮' : '✓'}</span>
             <div class="flex-1">
-                <p class="text-sm font-semibold mb-1" style="color: ${isGhost ? 'var(--accent)' : '#22c55e'};">
-                    ${isGhost ? 'Ritual Complete' : 'Upload Successful'}
-                </p>
-                <p class="text-xs opacity-80">${message}</p>
+                <h3 class="font-bold">${isGhost ? 'Ritual Complete' : 'Upload Successful'}</h3>
+                <div class="text-xs">${escapeHtml(message)}</div>
             </div>
         </div>
     `;
@@ -750,19 +707,22 @@ function showUploadSuccess(filename, pageCount) {
     
     // Auto-dismiss after 5 seconds
     setTimeout(() => {
-        successDiv.style.transition = 'opacity 0.5s ease-out';
-        successDiv.style.opacity = '0';
-        setTimeout(() => {
-            if (uploadStatus.contains(successDiv)) {
-                uploadStatus.removeChild(successDiv);
-            }
-        }, 500);
+        const alertDiv = successDiv.querySelector('.alert');
+        if (alertDiv) {
+            alertDiv.style.transition = 'opacity 0.5s ease-out';
+            alertDiv.style.opacity = '0';
+            setTimeout(() => {
+                if (uploadStatus.contains(successDiv)) {
+                    uploadStatus.removeChild(successDiv);
+                }
+            }, 500);
+        }
     }, 5000);
 }
 
 /**
  * Displays upload error feedback with specific error reason
- * Shows theme-appropriate error message with dismiss button
+ * Uses DaisyUI alert component with dismiss button
  * 
  * @param {string} errorReason - The reason for the upload failure
  */
@@ -773,22 +733,20 @@ function showUploadError(errorReason) {
     const title = isGhost ? 'The Spirits Reject This' : 'Upload Failed';
     const icon = isGhost ? '💀' : '⚠️';
     
-    // Create error message element with dismiss button
+    // Create DaisyUI alert component with dismiss button
     const errorDiv = document.createElement('div');
     errorDiv.className = 'upload-feedback error-message';
     errorDiv.innerHTML = `
-        <div class="flex items-start gap-3 p-4 rounded-lg shadow-lg animate-fade-in" 
-             style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444;">
+        <div class="alert alert-error opacity-0 animate-[fade-in_0.8s_ease-out_forwards] motion-reduce:animate-none motion-reduce:opacity-100" 
+             role="alert">
             <span class="text-xl">${icon}</span>
             <div class="flex-1">
-                <p class="text-sm font-semibold mb-1" style="color: #ef4444;">
-                    ${title}
-                </p>
-                <p class="text-xs opacity-80">${errorReason}</p>
+                <h3 class="font-bold">${title}</h3>
+                <div class="text-xs">${escapeHtml(errorReason)}</div>
             </div>
             <button onclick="dismissUploadError(this)" 
-                    class="text-xs px-2 py-1 rounded hover:bg-red-500 hover:bg-opacity-20 transition-colors"
-                    style="color: #ef4444;">
+                    class="btn btn-sm btn-ghost min-h-[44px] min-w-[44px]"
+                    aria-label="Dismiss error">
                 ✕
             </button>
         </div>
@@ -802,15 +760,18 @@ function showUploadError(errorReason) {
 
 /**
  * Dismisses an upload error message
- * Called when user clicks the dismiss button
+ * Called when user clicks the dismiss button on DaisyUI alert
  * 
  * @param {HTMLElement} button - The dismiss button element
  */
 function dismissUploadError(button) {
     const errorDiv = button.closest('.upload-feedback');
     if (errorDiv) {
-        errorDiv.style.transition = 'opacity 0.3s ease-out';
-        errorDiv.style.opacity = '0';
+        const alertDiv = errorDiv.querySelector('.alert');
+        if (alertDiv) {
+            alertDiv.style.transition = 'opacity 0.3s ease-out';
+            alertDiv.style.opacity = '0';
+        }
         setTimeout(() => {
             if (uploadStatus.contains(errorDiv)) {
                 uploadStatus.removeChild(errorDiv);
@@ -839,7 +800,7 @@ function updateProgress(percent, stage) {
 
 /**
  * Shows and updates the progress bar UI
- * Updates bar width, percentage text, and stage label
+ * Updates bar value, percentage text, and stage label
  * 
  * @param {number} percent - The progress percentage (0-100)
  * @param {string} stage - The current upload stage
@@ -853,7 +814,8 @@ function showProgressBar(percent, stage) {
     const isGhost = document.body.classList.contains('theme-dark-gothic');
     
     container.classList.remove('hidden');
-    bar.style.width = percent + '%';
+    // Update DaisyUI progress component value attribute
+    bar.value = percent;
     percentText.innerText = percent + '%';
     
     // Update label based on stage
@@ -882,7 +844,7 @@ function hideProgressBar() {
 
 /**
  * Shows a comprehensive error message with title, description, and dismiss button
- * Implements theme-appropriate styling and ARIA live regions for accessibility
+ * Uses DaisyUI alert component with ARIA live regions for accessibility
  * 
  * @param {string} title - The error title/heading
  * @param {string} description - Detailed error description
@@ -905,29 +867,23 @@ function showError(title, description, container = null, options = {}) {
         onDismiss = null
     } = options;
     
-    // Theme-appropriate icons and styling
+    // Theme-appropriate icons
     const icon = isGhost ? '💀' : '⚠️';
-    const errorClass = isGhost ? 'error-message-gothic' : 'error-message-professional';
     
-    // Create error element with proper ARIA attributes
+    // Create DaisyUI alert component with proper ARIA attributes
     const errorDiv = document.createElement('div');
-    errorDiv.className = `error-message ${errorClass} animate-fade-in`;
+    errorDiv.className = `error-message opacity-0 animate-[fade-in_0.8s_ease-out_forwards] motion-reduce:animate-none motion-reduce:opacity-100`;
     errorDiv.setAttribute('role', 'alert');
     errorDiv.setAttribute('aria-live', 'assertive');
     errorDiv.setAttribute('aria-atomic', 'true');
     
-    // Build error content
+    // Build DaisyUI alert content
     let errorHTML = `
-        <div class="flex items-start gap-3 p-4 rounded-lg shadow-lg" 
-             style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444;">
+        <div class="alert alert-error">
             <span class="text-xl flex-shrink-0" aria-hidden="true">${icon}</span>
             <div class="flex-1">
-                <p class="text-sm font-semibold mb-1" style="color: #ef4444;">
-                    ${escapeHtml(title)}
-                </p>
-                <p class="text-xs opacity-80" style="color: var(--text-main);">
-                    ${escapeHtml(description)}
-                </p>
+                <h3 class="font-bold">${escapeHtml(title)}</h3>
+                <div class="text-xs">${escapeHtml(description)}</div>
             </div>
             <div class="flex gap-2 flex-shrink-0">
     `;
@@ -935,8 +891,7 @@ function showError(title, description, container = null, options = {}) {
     // Add retry button if retryable
     if (retryable && onRetry) {
         errorHTML += `
-            <button class="error-retry-btn text-xs px-3 py-1 rounded transition-colors font-semibold"
-                    style="background: #ef4444; color: white;"
+            <button class="error-retry-btn btn btn-sm btn-error min-h-[44px] min-w-[44px]"
                     aria-label="Retry action">
                 ${isGhost ? '🔄 Retry Ritual' : '🔄 Retry'}
             </button>
@@ -945,8 +900,7 @@ function showError(title, description, container = null, options = {}) {
     
     // Add dismiss button
     errorHTML += `
-                <button class="error-dismiss-btn text-xs px-2 py-1 rounded hover:bg-red-500 hover:bg-opacity-20 transition-colors"
-                        style="color: #ef4444;"
+                <button class="error-dismiss-btn btn btn-sm btn-ghost min-h-[44px] min-w-[44px]"
                         aria-label="Dismiss error">
                     ✕
                 </button>
@@ -1284,17 +1238,16 @@ async function refreshDocuments() {
             return;
         }
         
-        // Build document list with checkboxes
+        // Build document list with DaisyUI checkboxes and buttons
         let html = '';
         data.documents.forEach(doc => {
             const pageText = doc.pages === 1 ? 'page' : 'pages';
             const chunkText = doc.chunks === 1 ? 'chunk' : 'chunks';
             
             html += `
-                <div class="document-item flex items-center gap-3 p-2 rounded hover:bg-opacity-50 transition-all" 
-                     style="background: var(--bg-card);">
+                <div class="document-item flex items-center gap-3 p-2 rounded hover:bg-base-300 transition-all bg-base-200">
                     <input type="checkbox" 
-                           class="doc-checkbox cursor-pointer" 
+                           class="checkbox min-h-[44px] min-w-[44px] doc-checkbox" 
                            data-source="${escapeHtml(doc.source)}"
                            onchange="updateSelectionCount()"
                            checked>
@@ -1307,9 +1260,9 @@ async function refreshDocuments() {
                         </div>
                     </div>
                     <button onclick="deleteDocument('${escapeHtml(doc.source)}')" 
-                            class="text-xs px-2 py-1 rounded opacity-60 hover:opacity-100 transition-opacity"
-                            style="color: #ef4444;"
-                            title="Delete document">
+                            class="btn btn-ghost btn-xs text-error min-h-[44px] min-w-[44px]"
+                            title="Delete document"
+                            aria-label="Delete ${escapeHtml(doc.source)}">
                         🗑️
                     </button>
                 </div>
@@ -1524,6 +1477,8 @@ function showConfirmDialog(options) {
         <div class="modal-footer" style="display: flex; gap: 12px; justify-content: flex-end;">
             <button class="modal-btn-cancel" style="
                 padding: 10px 24px;
+                min-height: 44px;
+                min-width: 44px;
                 border-radius: 8px;
                 font-weight: 600;
                 cursor: pointer;
@@ -1536,6 +1491,8 @@ function showConfirmDialog(options) {
             </button>
             <button class="modal-btn-confirm" style="
                 padding: 10px 24px;
+                min-height: 44px;
+                min-width: 44px;
                 border-radius: 8px;
                 font-weight: 600;
                 cursor: pointer;

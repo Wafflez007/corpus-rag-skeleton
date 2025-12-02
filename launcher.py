@@ -19,7 +19,7 @@ load_dotenv()
 # Create landing page app
 landing_app = Flask(__name__)
 
-# Enhanced Landing Page with Split-Screen Architecture
+# Enhanced Landing Page with Split-Screen Architecture - Migrated to Tailwind + DaisyUI
 LANDING_PAGE = """
 <!DOCTYPE html>
 <html lang="en">
@@ -27,111 +27,45 @@ LANDING_PAGE = """
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Corpus | Select Domain</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Tailwind Configuration -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'legal-navy': '#0f172a',
+              'legal-gold': '#ca8a04',
+              'legal-steel': '#334155',
+              'legal-slate': '#1e293b',
+              'legal-light': '#f8fafc',
+              'legal-input': '#f1f5f9',
+              'legal-border': '#e2e8f0',
+              'ghost-dark': '#050505',
+              'ghost-card': '#110a0a',
+              'ghost-border': '#3a1a1a',
+              'ghost-glow': '#ff3f3f',
+              'ghost-blood': '#8b0000',
+              'ghost-dried': '#2b0505',
+              'ghost-white': '#d4d4d4'
+            }
+          }
+        }
+      }
+    </script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Creepster&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --legal-blue: #0f172a;
-            --legal-gold: #c5a059;
-            --ghost-dark: #0a0118;
-            --ghost-glow: #b026ff;
-            --split-speed: 1000ms;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            overflow: hidden; /* Hide scrollbars */
-            height: 100vh;
-            background: #111;
-        }
-
-        /* CONTAINER */
-        .container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-        }
-
-        /* SPLIT SECTIONS */
-        .split {
-            position: relative;
-            width: 50%;
-            height: 100%;
-            overflow: hidden;
-            transition: width var(--split-speed) ease-in-out;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* BACKGROUND CONTENT LAYERS */
-        .bg-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            transform: translateY(0);
-            transition: transform var(--split-speed) ease-in-out;
-            padding: 2rem;
-            max-width: 600px;
-        }
-
-        /* HEADINGS & TEXT */
-        h1 {
-            font-size: 4rem;
-            margin-bottom: 0.5rem;
-            white-space: nowrap;
-        }
-
-        p.desc {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            opacity: 0; /* Hidden by default */
-            transform: translateY(20px);
-            transition: all 0.5s ease-in-out;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .btn {
-            display: inline-block;
-            margin-top: 2rem;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        /* --- LEGAL SIDE STYLING --- */
-        .split.legal {
-            background-color: var(--legal-blue);
-            color: #fff;
-            border-right: 2px solid var(--legal-gold);
-        }
-
-        /* Architectural Grid Pattern */
-        .split.legal .bg-layer {
+        /* Minimal custom CSS for unique effects that can't be replicated with Tailwind */
+        
+        /* Architectural Grid Pattern Animation for Legal Side */
+        .legal-grid-bg {
             background-image: 
                 linear-gradient(rgba(197, 160, 89, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(197, 160, 89, 0.05) 1px, transparent 1px);
@@ -139,103 +73,23 @@ LANDING_PAGE = """
             animation: scrollGrid 60s linear infinite;
         }
 
-        .split.legal h1 {
-            font-family: 'Playfair Display', serif;
-            color: var(--legal-gold);
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        .split.legal .icon {
-            font-size: 5rem;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.3));
-        }
-
-        .split.legal .btn {
-            border: 1px solid var(--legal-gold);
-            color: var(--legal-gold);
-            background: rgba(15, 23, 42, 0.8);
-        }
-
-        .split.legal:hover .btn {
-            background: var(--legal-gold);
-            color: var(--legal-blue);
-        }
-
-        /* --- GHOST SIDE STYLING --- */
-        .split.ghost {
-            background-color: var(--ghost-dark);
-            color: #e0e0e0;
-        }
-
-        /* Fog Animation */
-        .split.ghost .bg-layer {
+        /* Mystical Fog Effect for Ghost Side */
+        .ghost-fog-bg {
             background: 
                 radial-gradient(circle at 50% 50%, rgba(75, 0, 130, 0.2), transparent 70%),
                 url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
         }
         
-        .split.ghost::before {
+        .ghost-glow-overlay::before {
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(45deg, transparent 40%, rgba(176, 38, 255, 0.1) 100%);
             animation: pulseGlow 4s ease-in-out infinite alternate;
+            pointer-events: none;
         }
 
-        .split.ghost h1 {
-            font-family: 'Creepster', display;
-            letter-spacing: 3px;
-            color: #d8b4fe;
-            text-shadow: 0 0 15px var(--ghost-glow);
-        }
-
-        .split.ghost .icon {
-            font-size: 5rem;
-            margin-bottom: 1rem;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .split.ghost .btn {
-            border: 1px solid #d8b4fe;
-            color: #d8b4fe;
-            background: rgba(10, 1, 24, 0.8);
-            box-shadow: 0 0 10px var(--ghost-glow);
-        }
-
-        .split.ghost:hover .btn {
-            background: #d8b4fe;
-            color: var(--ghost-dark);
-            box-shadow: 0 0 20px var(--ghost-glow);
-        }
-
-        /* --- INTERACTION CLASSES --- */
-        
-        /* When hovering Left */
-        .hover-left .split.legal { width: 75%; }
-        .hover-left .split.ghost { width: 25%; }
-        
-        /* When hovering Right */
-        .hover-right .split.ghost { width: 75%; }
-        .hover-right .split.legal { width: 25%; }
-
-        /* Show details on active side */
-        .hover-left .split.legal .desc,
-        .hover-left .split.legal .btn,
-        .hover-right .split.ghost .desc,
-        .hover-right .split.ghost .btn {
-            opacity: 1;
-            transform: translateY(0);
-            transition-delay: 0.1s;
-        }
-
-        /* Dim passive side */
-        .hover-left .split.ghost h1,
-        .hover-left .split.ghost .icon { opacity: 0.5; transform: scale(0.8); }
-        .hover-right .split.legal h1,
-        .hover-right .split.legal .icon { opacity: 0.5; transform: scale(0.8); }
-
-        /* --- ANIMATIONS --- */
+        /* Animations */
         @keyframes scrollGrid {
             0% { background-position: 0 0; }
             100% { background-position: 0 1000px; }
@@ -250,68 +104,120 @@ LANDING_PAGE = """
             0% { opacity: 0.3; }
             100% { opacity: 0.7; }
         }
-
-        /* --- MOBILE RESPONSIVE --- */
-        @media(max-width: 800px) {
-            .container { flex-direction: column; }
-            .split { width: 100% !important; height: 50%; }
-            
-            /* Mobile Hover Simulation (Click/Tap states) */
-            .split:hover { height: 60%; }
-            .split:not(:hover) { height: 40%; }
-            
-            h1 { font-size: 2.5rem; }
-            .icon { font-size: 3rem; }
-            p.desc { display: none; } /* Hide description on mobile to save space */
-            .btn { opacity: 1; transform: translateY(0); margin-top: 1rem; padding: 0.8rem 1.5rem; }
-        }
     </style>
 </head>
-<body>
+<body class="font-['Inter'] overflow-hidden h-screen bg-gray-900">
 
-    <div class="container">
+    <!-- Mobile: Single column (stacked), Tablet+: Side-by-side split -->
+    <div class="relative w-full h-full flex flex-col md:flex-row" id="container">
         
         <!-- LEGAL SIDE -->
-        <a href="/legal/" class="split legal">
-            <div class="bg-layer"></div>
-            <div class="content">
-                <div class="icon">⚖️</div>
-                <h1>Legal Eagle</h1>
-                <p class="desc">
-                    Precision. Precedent. Professionalism.<br>
-                    Analyze contracts and case law with <br>rigorous semantic search.
+        <a href="/legal/" 
+           class="group relative flex-1 overflow-hidden flex items-center justify-center no-underline cursor-pointer bg-legal-navy text-white border-b-2 md:border-b-0 md:border-r-2 border-legal-gold transition-all duration-1000 ease-in-out hover:flex-[1.5] md:hover:flex-[2]"
+           id="legal-side">
+            <!-- Background Layer -->
+            <div class="legal-grid-bg absolute top-0 left-0 w-full h-full z-0"></div>
+            
+            <!-- Content -->
+            <div class="relative z-10 text-center p-6 sm:p-8 max-w-2xl transition-transform duration-1000 ease-in-out">
+                <div class="text-6xl sm:text-7xl md:text-8xl mb-3 sm:mb-4 drop-shadow-[0_0_10px_rgba(197,160,89,0.3)] transition-all duration-300 group-hover:scale-100">
+                    ⚖️
+                </div>
+                <h1 class="font-['Playfair_Display'] text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-2 text-legal-gold" style="text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+                    Legal Eagle
+                </h1>
+                <p class="text-base sm:text-lg md:text-xl leading-relaxed max-w-md mx-auto opacity-70 md:opacity-0 translate-y-0 md:translate-y-5 transition-all duration-500 ease-in-out md:group-hover:opacity-100 md:group-hover:translate-y-0 delay-100 mt-2 md:mt-0">
+                    Precision. Precedent. Professionalism.<br class="hidden sm:inline">
+                    Analyze contracts and case law with<br class="hidden sm:inline">rigorous semantic search.
                 </p>
-                <div class="btn">Access Counsel</div>
+                <button class="btn btn-outline border-legal-gold text-legal-gold bg-legal-navy/80 hover:bg-legal-gold hover:text-legal-navy hover:border-legal-gold mt-4 sm:mt-6 md:mt-8 px-8 sm:px-10 rounded-full uppercase tracking-widest font-bold text-xs sm:text-sm transition-all duration-300 opacity-100 md:opacity-0 translate-y-0 md:translate-y-5 md:group-hover:opacity-100 md:group-hover:translate-y-0 delay-100 min-h-[44px] min-w-[44px]">
+                    Access Counsel
+                </button>
             </div>
         </a>
 
         <!-- GHOST SIDE -->
-        <a href="/ghost/" class="split ghost">
-            <div class="bg-layer"></div>
-            <div class="content">
-                <div class="icon">🔮</div>
-                <h1>Ouija Board</h1>
-                <p class="desc">
-                    Consult the archives from beyond the veil.<br>
-                    Unearth hidden meanings and <br>cryptic connections.
+        <a href="/ghost/" 
+           class="ghost-glow-overlay group relative flex-1 overflow-hidden flex items-center justify-center no-underline cursor-pointer bg-ghost-dark text-gray-200 transition-all duration-1000 ease-in-out hover:flex-[1.5] md:hover:flex-[2]"
+           id="ghost-side">
+            <!-- Background Layer -->
+            <div class="ghost-fog-bg absolute top-0 left-0 w-full h-full z-0"></div>
+            
+            <!-- Content -->
+            <div class="relative z-10 text-center p-6 sm:p-8 max-w-2xl transition-transform duration-1000 ease-in-out">
+                <div class="text-6xl sm:text-7xl md:text-8xl mb-3 sm:mb-4 animate-[float_6s_ease-in-out_infinite] transition-all duration-300 group-hover:scale-100">
+                    🔮
+                </div>
+                <h1 class="font-['Creepster'] text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-2 tracking-wider text-purple-300" style="text-shadow: 0 0 15px #b026ff;">
+                    Ouija Board
+                </h1>
+                <p class="text-base sm:text-lg md:text-xl leading-relaxed max-w-md mx-auto opacity-70 md:opacity-0 translate-y-0 md:translate-y-5 transition-all duration-500 ease-in-out md:group-hover:opacity-100 md:group-hover:translate-y-0 delay-100 mt-2 md:mt-0">
+                    Consult the archives from beyond the veil.<br class="hidden sm:inline">
+                    Unearth hidden meanings and<br class="hidden sm:inline">cryptic connections.
                 </p>
-                <div class="btn">Summon Spirits</div>
+                <button class="btn btn-outline border-purple-300 text-purple-300 bg-[#0a0118]/80 hover:bg-purple-300 hover:text-ghost-dark hover:border-purple-300 shadow-[0_0_10px_#b026ff] hover:shadow-[0_0_20px_#b026ff] mt-4 sm:mt-6 md:mt-8 px-8 sm:px-10 rounded-full uppercase tracking-widest font-bold text-xs sm:text-sm transition-all duration-300 opacity-100 md:opacity-0 translate-y-0 md:translate-y-5 md:group-hover:opacity-100 md:group-hover:translate-y-0 delay-100 min-h-[44px] min-w-[44px]">
+                    Summon Spirits
+                </button>
             </div>
         </a>
 
     </div>
 
     <script>
-        const container = document.querySelector('.container');
-        const legal = document.querySelector('.split.legal');
-        const ghost = document.querySelector('.split.ghost');
+        // Enhanced hover interaction for desktop
+        const container = document.getElementById('container');
+        const legalSide = document.getElementById('legal-side');
+        const ghostSide = document.getElementById('ghost-side');
 
-        // Add hover classes to container for CSS width transitions
-        legal.addEventListener('mouseenter', () => container.classList.add('hover-left'));
-        legal.addEventListener('mouseleave', () => container.classList.remove('hover-left'));
+        // Dim the non-hovered side on desktop
+        legalSide.addEventListener('mouseenter', () => {
+            if (window.innerWidth >= 768) {
+                ghostSide.querySelector('h1').style.opacity = '0.5';
+                ghostSide.querySelector('h1').style.transform = 'scale(0.8)';
+                ghostSide.querySelectorAll('.text-7xl, .text-8xl').forEach(el => {
+                    el.style.opacity = '0.5';
+                    el.style.transform = 'scale(0.8)';
+                });
+            }
+        });
 
-        ghost.addEventListener('mouseenter', () => container.classList.add('hover-right'));
-        ghost.addEventListener('mouseleave', () => container.classList.remove('hover-right'));
+        legalSide.addEventListener('mouseleave', () => {
+            if (window.innerWidth >= 768) {
+                ghostSide.querySelector('h1').style.opacity = '1';
+                ghostSide.querySelector('h1').style.transform = 'scale(1)';
+                ghostSide.querySelectorAll('.text-7xl, .text-8xl').forEach(el => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'scale(1)';
+                });
+            }
+        });
+
+        ghostSide.addEventListener('mouseenter', () => {
+            if (window.innerWidth >= 768) {
+                legalSide.querySelector('h1').style.opacity = '0.5';
+                legalSide.querySelector('h1').style.transform = 'scale(0.8)';
+                legalSide.querySelectorAll('.text-7xl, .text-8xl').forEach(el => {
+                    el.style.opacity = '0.5';
+                    el.style.transform = 'scale(0.8)';
+                });
+            }
+        });
+
+        ghostSide.addEventListener('mouseleave', () => {
+            if (window.innerWidth >= 768) {
+                legalSide.querySelector('h1').style.opacity = '1';
+                legalSide.querySelector('h1').style.transform = 'scale(1)';
+                legalSide.querySelectorAll('.text-7xl, .text-8xl').forEach(el => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'scale(1)';
+                });
+            }
+        });
+
+        // Add smooth transitions
+        document.querySelectorAll('h1, .text-7xl, .text-8xl').forEach(el => {
+            el.style.transition = 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out';
+        });
     </script>
 </body>
 </html>

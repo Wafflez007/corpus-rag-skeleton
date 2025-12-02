@@ -5,6 +5,24 @@ class Config:
     APP_NAME = "Ouija Board 🔮"
     THEME_CSS = "dark-gothic"
     
+    # DaisyUI Theme Configuration
+    DAISYUI_THEME = "ouija-board"
+    DAISYUI_THEME_CONFIG = {
+        "ouija-board": {
+            "primary": "#8b0000",      # Deep blood red
+            "secondary": "#2b0505",    # Dried blood
+            "accent": "#ff3f3f",       # Bright red glow
+            "neutral": "#d4d4d4",      # Ghostly white
+            "base-100": "#050505",     # Void black
+            "base-200": "#110a0a",     # Dark card
+            "base-300": "#3a1a1a",     # Dark border
+            "info": "#8b0000",
+            "success": "#8b0000",
+            "warning": "#ff3f3f",
+            "error": "#ff3f3f"
+        }
+    }
+    
     # RAG Configuration
     CHUNK_SIZE = 500
     CHUNK_OVERLAP = 50

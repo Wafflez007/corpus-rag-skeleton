@@ -9,9 +9,9 @@
 │   ├── app.py             # Flask application factory
 │   ├── vector_store.py    # Vector DB operations (ingest, search, delete)
 │   ├── templates/         # Jinja2 templates
-│   │   └── index.html     # Main chat interface
+│   │   └── index.html     # Main chat interface (with Tailwind + DaisyUI)
 │   └── static/            # Frontend assets
-│       ├── styles.css     # Theme-aware CSS
+│       ├── styles.css     # Minimal custom CSS (~500 lines, theme-specific effects)
 │       ├── app.js         # Client-side JavaScript
 │       ├── favicon-legal.svg   # Legal Eagle favicon
 │       ├── favicon-ghost.svg   # Ouija Board favicon
@@ -38,13 +38,24 @@
 │   ├── test_sequential_upload.py
 │   ├── test_upload_error_feedback.py
 │   ├── test_upload_progress.py
-│   └── test_upload_success_feedback.py
+│   ├── test_upload_success_feedback.py
+│   ├── test_tailwind_daisyui_cdn.py
+│   ├── test_daisyui_theme_config.py
+│   ├── test_theme_switching.py
+│   └── ... (more Tailwind/DaisyUI tests)
 ├── .kiro/                 # Kiro IDE configuration
 │   ├── steering/          # Steering documents
 │   │   ├── tech.md
 │   │   ├── structure.md
 │   │   ├── product.md
 │   │   └── personalities.md
+│   ├── specs/             # Feature specifications
+│   │   └── tailwind-daisyui-integration/
+│   │       ├── requirements.md
+│   │       ├── design.md
+│   │       ├── tasks.md
+│   │       ├── MIGRATION_GUIDE.md
+│   │       └── COMPONENT_PATTERNS.md
 │   └── spec.md            # Project specification
 ├── chroma_db/             # ChromaDB persistence (auto-created)
 ├── venv/                  # Virtual environment
@@ -117,3 +128,60 @@ New app modes can be added by:
 2. Adding `config.py` with `Config` class (APP_NAME, THEME_CSS, SYSTEM_PROMPT)
 3. Adding `main.py` entry point with unique port
 4. Adding `__init__.py` for package structure
+5. Configuring DaisyUI theme in template's inline config
+6. Applying theme via `data-theme` attribute on `<html>` tag
+
+## UI Architecture (Tailwind + DaisyUI)
+
+### CDN Integration
+
+Both Tailwind CSS and DaisyUI are loaded via CDN in `skeleton_core/templates/index.html`:
+- Tailwind CSS 3.x from `cdn.tailwindcss.com`
+- DaisyUI 4.4.19 from `cdn.jsdelivr.net`
+- No build process required for development
+
+### Theme System
+
+Each app mode defines a custom DaisyUI theme inline:
+- Legal Eagle: `legal-eagle` theme (professional blue)
+- Ouija Board: `ouija-board` theme (dark gothic)
+- Themes applied via `data-theme` attribute on `<html>` tag
+- Theme colors: primary, secondary, accent, base-100/200/300, semantic colors
+
+### Component Usage
+
+Standard UI components use DaisyUI classes:
+- Buttons: `btn btn-primary`, `btn btn-accent`
+- Cards: `card bg-base-200 shadow-xl`
+- Inputs: `input input-bordered`, `file-input file-input-bordered`
+- Chat: `chat chat-start/chat-end`, `chat-bubble`
+- Progress: `progress progress-primary`
+- Alerts: `alert alert-error/success/info/warning`
+- Loading: `loading loading-spinner`
+
+### Custom CSS
+
+Minimal custom CSS (~500 lines) in `skeleton_core/static/styles.css` for:
+- Blood drip animations (Ouija Board)
+- Mystical fog effects (Ouija Board)
+- Planchette cursor (Ouija Board)
+- Title pulse animations (both themes)
+- Other unique visual effects that cannot be replicated with Tailwind
+
+### Responsive Design
+
+Mobile-first approach using Tailwind breakpoints:
+- Default: Mobile (0px+)
+- `sm:` Small tablets (640px+)
+- `md:` Tablets (768px+)
+- `lg:` Desktops (1024px+)
+- `xl:` Large desktops (1280px+)
+
+### Accessibility
+
+All components meet WCAG AA standards:
+- Minimum 44x44px touch targets: `min-h-[44px] min-w-[44px]`
+- High color contrast ratios (14.5:1 Legal, 18.2:1 Ouija)
+- Visible focus indicators (DaisyUI built-in)
+- Semantic HTML with ARIA labels
+- Keyboard navigation support
