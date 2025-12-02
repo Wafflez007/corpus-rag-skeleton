@@ -26,10 +26,6 @@ def create_app(config: Any) -> Flask:
     app.config['THEME_CSS'] = config.THEME_CSS
     app.config['SYSTEM_PROMPT'] = config.SYSTEM_PROMPT
     
-    # DaisyUI theme configuration (with defaults for backward compatibility)
-    app.config['DAISYUI_THEME'] = getattr(config, 'DAISYUI_THEME', None)
-    app.config['DAISYUI_THEME_CONFIG'] = getattr(config, 'DAISYUI_THEME_CONFIG', {})
-    
     # RAG configuration (with defaults for backward compatibility)
     app.config['CHUNK_SIZE'] = getattr(config, 'CHUNK_SIZE', 500)
     app.config['CHUNK_OVERLAP'] = getattr(config, 'CHUNK_OVERLAP', 50)
@@ -52,9 +48,7 @@ def create_app(config: Any) -> Flask:
             'index.html',
             app_name=app.config['APP_NAME'],
             theme=app.config['THEME_CSS'],
-            model_name=app.config.get('ACTIVE_MODEL', 'Gemini AI'),
-            daisyui_theme=app.config.get('DAISYUI_THEME'),
-            daisyui_theme_config=app.config.get('DAISYUI_THEME_CONFIG', {})
+            model_name=app.config.get('ACTIVE_MODEL', 'Gemini AI')
         )
     
     @app.route('/upload', methods=['POST'])

@@ -109,19 +109,16 @@ body {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Tailwind: transition-[background-color,color] duration-500 ease-in-out */
     transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 /* Smooth scrolling */
 html {
-    /* Tailwind: scroll-smooth motion-reduce:scroll-auto */
     scroll-behavior: smooth;
 }
 
 /* Chat history smooth scrolling */
 #chat-history {
-    /* Tailwind: scroll-smooth motion-reduce:scroll-auto transition-[background-color,border-color] duration-300 ease-in-out */
     scroll-behavior: smooth;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
@@ -138,7 +135,6 @@ button {
     border: none;
     outline: none;
     cursor: pointer;
-    /* Tailwind: transition-[transform,box-shadow] duration-200 ease-in-out */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -147,7 +143,6 @@ input, textarea {
     font-family: inherit;
     border: none;
     outline: none;
-    /* Tailwind: transition-[border-color,box-shadow] duration-200 ease-in-out */
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -160,7 +155,6 @@ input, textarea {
 .btn-primary {
     background: linear-gradient(135deg, var(--primary, #0f172a) 0%, var(--secondary, #334155) 100%);
     color: white;
-    /* Tailwind: transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:scale-105 */
     transition: transform 0.2s ease, box-shadow 0.3s ease, filter 0.2s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
     font-weight: 600;
@@ -169,33 +163,29 @@ input, textarea {
 }
 
 .btn-primary:hover {
-    /* Tailwind: hover:-translate-y-0.5 hover:scale-105 hover:shadow-lg hover:brightness-110 */
     transform: translateY(-2px) scale(1.02);
     box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1)), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     filter: brightness(1.1);
 }
 
 .btn-primary:active {
-    /* Tailwind: active:translate-y-0 active:scale-100 */
     transform: translateY(0px) scale(1);
     box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
 }
 
 .btn-primary:focus-visible {
-    /* Tailwind: focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 */
     outline: 2px solid var(--accent, #ca8a04);
     outline-offset: 2px;
 }
 
 /* Chat Message Components */
 .chat-message {
-    /* Tailwind animation: animate-[pop-in_0.3s_cubic-bezier(0.25,0.46,0.45,0.94)_both] */
-    /* Using Tailwind transition utilities instead */
+    animation: pop-in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     padding: var(--spacing-md, 1rem);
     margin-bottom: var(--spacing-sm, 0.5rem);
     border-radius: var(--radius-md, 0.5rem);
     contain: layout style paint;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .chat-message:hover {
@@ -246,12 +236,10 @@ input, textarea {
     opacity: 0.5;
     font-family: var(--font-mono, 'Courier New', monospace);
     padding-left: var(--spacing-sm, 0.5rem);
-    /* Tailwind: transition-opacity duration-200 ease-in-out */
     transition: opacity 0.2s ease;
 }
 
 .chat-message:hover .message-timestamp {
-    /* Tailwind: group-hover:opacity-70 */
     opacity: 0.7;
 }
 
@@ -271,12 +259,10 @@ input, textarea {
     padding: var(--spacing-lg, 1.5rem);
     box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
     contain: layout style paint;
-    /* Tailwind: transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:shadow-lg */
     transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-    /* Tailwind: hover:-translate-y-0.5 hover:shadow-lg */
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
 }
@@ -288,19 +274,16 @@ input, textarea {
     color: var(--text-main, #1e293b);
     padding: var(--spacing-md, 1rem);
     border-radius: var(--radius-md, 0.5rem);
-    /* Tailwind: transition-all duration-200 ease-in-out focus:-translate-y-px focus:ring-2 */
     transition: border-color 0.2s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .input-field:focus {
-    /* Tailwind: focus:border-accent focus:ring-2 focus:ring-accent/10 focus:-translate-y-px */
     border-color: var(--accent, #ca8a04);
     box-shadow: 0 0 0 3px rgba(202, 138, 4, 0.1);
     transform: translateY(-1px);
 }
 
 .input-field:hover {
-    /* Tailwind: hover:border-gray-500 */
     border-color: var(--text-dim, #64748b);
 }
 
@@ -311,14 +294,13 @@ input, textarea {
     border-radius: 50%;
     width: 24px;
     height: 24px;
-    /* Tailwind: animate-spin */
     animation: spin 0.8s linear infinite;
 }
 
 .loading-indicator {
-    /* Tailwind: transition-all duration-300 ease-in-out opacity-100 */
     transition: opacity 0.3s ease-in-out, transform 0.3s ease;
     opacity: 1;
+    animation: fade-in 0.3s ease-out;
 }
 
 /* Progress Bar */
@@ -328,39 +310,34 @@ input, textarea {
     background: var(--bg-input, #f1f5f9);
     border-radius: var(--radius-sm, 0.25rem);
     overflow: hidden;
-    /* Tailwind: transition-opacity duration-300 ease-in-out */
     transition: opacity 0.3s ease;
 }
 
 .progress-bar-fill {
     height: 100%;
     background: var(--accent, #ca8a04);
-    /* Tailwind: transition-[width] duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] */
     transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: var(--radius-sm, 0.25rem);
 }
 
 /* Upload Status */
 #upload-status {
-    /* Tailwind: transition-opacity duration-300 ease-in-out */
     transition: opacity 0.3s ease-in-out;
 }
 
 #upload-progress-container {
-    /* Tailwind: transition-[opacity,max-height] duration-300 ease-in-out */
     transition: opacity 0.3s ease-in-out, max-height 0.3s ease;
 }
 
 /* Error Message Components */
 .error-message {
     margin: var(--spacing-md, 1rem) 0;
-    /* Tailwind: animate-[slide-up_0.3s_ease-out] or transition-all duration-300 */
+    animation: slide-up 0.3s ease-out;
     contain: layout style paint;
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .error-retry-btn {
-    /* Tailwind: transition-all duration-200 ease-in-out hover:-translate-y-px hover:shadow-md hover:brightness-110 */
     transition: all 0.2s ease;
     cursor: pointer;
     font-weight: 600;
@@ -369,25 +346,21 @@ input, textarea {
 }
 
 .error-retry-btn:hover {
-    /* Tailwind: hover:-translate-y-px hover:shadow-md hover:brightness-110 */
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
     filter: brightness(1.1);
 }
 
 .error-retry-btn:active {
-    /* Tailwind: active:translate-y-0 */
     transform: translateY(0);
 }
 
 .error-retry-btn:focus-visible {
-    /* Tailwind: focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-500 focus-visible:outline-offset-2 */
     outline: 2px solid #ef4444;
     outline-offset: 2px;
 }
 
 .error-dismiss-btn {
-    /* Tailwind: transition-all duration-200 ease-in-out hover:bg-red-500/20 */
     transition: all 0.2s ease;
     cursor: pointer;
     min-height: 32px;
@@ -396,12 +369,10 @@ input, textarea {
 }
 
 .error-dismiss-btn:hover {
-    /* Tailwind: hover:bg-red-500/20 */
     background-color: rgba(239, 68, 68, 0.2) !important;
 }
 
 .error-dismiss-btn:focus-visible {
-    /* Tailwind: focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-500 focus-visible:outline-offset-2 */
     outline: 2px solid #ef4444;
     outline-offset: 2px;
 }
@@ -479,7 +450,6 @@ input, textarea {
     }
 }
 
-/* ⚠️ CUSTOM MYSTICAL EFFECT - Title pulse animation keyframes */
 @keyframes title-pulse {
     0%, 100% { 
         text-shadow: 0 0 10px var(--primary, #8b0000), 0 0 20px var(--primary, #8b0000), 2px 2px 0px #000; 
@@ -523,7 +493,6 @@ input, textarea {
     }
 }
 
-/* ⚠️ CUSTOM MYSTICAL EFFECT - Mystical fog animation keyframes */
 @keyframes mystical-fog {
     0%, 100% {
         opacity: 1;
@@ -539,7 +508,6 @@ input, textarea {
     }
 }
 
-/* ⚠️ CUSTOM MYSTICAL EFFECT - Floating particles animation keyframes */
 @keyframes floating-particles {
     0%, 100% {
         background-position: 0% 0%;
@@ -577,13 +545,7 @@ input, textarea {
     }
 }
 
-/* Animation Classes - Migrated to Tailwind utilities */
-/* Use Tailwind classes instead: */
-/* .animate-fade-in -> animate-[fade-in_0.8s_ease-out_forwards] or transition-opacity duration-800 */
-/* .animate-slide-up -> animate-[slide-up_0.6s_ease-out_forwards] or transition-transform duration-600 */
-/* .animate-pop-in -> animate-[pop-in_0.3s_cubic-bezier(0.25,0.46,0.45,0.94)_both] */
-
-/* Keeping keyframes for backward compatibility but prefer Tailwind utilities */
+/* Animation Classes */
 .animate-fade-in {
     animation: fade-in 0.8s ease-out forwards;
 }
@@ -596,7 +558,7 @@ input, textarea {
     animation: pop-in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
-/* Respect reduced motion preferences - Tailwind: motion-reduce:animate-none motion-reduce:transition-none */
+/* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -619,20 +581,8 @@ input, textarea {
     .btn-primary:hover,
     .chat-message:hover,
     .card:hover,
-    .input-field:focus,
-    .error-retry-btn:hover,
-    .error-dismiss-btn:hover,
-    .back-to-launcher-btn:hover {
+    .input-field:focus {
         transform: none !important;
-    }
-    
-    /* Disable all custom animations */
-    .animate-fade-in,
-    .animate-slide-up,
-    .animate-pop-in,
-    .loading-spinner,
-    .loading-indicator {
-        animation: none !important;
     }
 }
 
@@ -853,8 +803,7 @@ textarea {
 
 /* Dark Gothic Theme Overrides */
 
-/* ⚠️ CUSTOM MYSTICAL EFFECT - CANNOT BE REPLICATED WITH TAILWIND/DAISYUI
-   Custom planchette cursor for Ouija theme - SVG data URI cursor */
+/* Custom planchette cursor for Ouija theme */
 .theme-dark-gothic,
 .theme-dark-gothic * {
     cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none' stroke='%238b0000' stroke-width='2'><path d='M16 2 L28 26 Q16 30 4 26 Z' fill='rgba(20,0,0,0.5)'/><circle cx='16' cy='14' r='4' stroke='%23ff3f3f' stroke-width='1.5'/></svg>") 16 14, auto;
@@ -880,8 +829,7 @@ textarea {
 
 /* Vignette effect removed - was causing black side boxes */
 
-/* ⚠️ CUSTOM MYSTICAL EFFECT - CANNOT BE REPLICATED WITH TAILWIND/DAISYUI
-   Animated mystical fog overlay with multiple radial gradients */
+/* Animated mystical fog overlay */
 .theme-dark-gothic::before {
     content: '';
     position: fixed;
@@ -897,8 +845,7 @@ textarea {
     z-index: 0;
 }
 
-/* ⚠️ CUSTOM MYSTICAL EFFECT - CANNOT BE REPLICATED WITH TAILWIND/DAISYUI
-   Floating particles effect with animated radial gradients */
+/* Floating particles effect */
 .theme-dark-gothic::after {
     content: '';
     position: fixed;
@@ -946,8 +893,7 @@ textarea {
     font-family: var(--font-body, 'Georgia', serif);
 }
 
-/* ⚠️ CUSTOM MYSTICAL EFFECT - CANNOT BE REPLICATED WITH TAILWIND/DAISYUI
-   Pulsing glow animation on title with text-shadow and scale transform */
+/* Pulsing glow animation on title */
 .theme-dark-gothic .spooky-title,
 .theme-dark-gothic h1 {
     font-family: var(--font-heading, 'Creepster', cursive);
@@ -1033,26 +979,6 @@ textarea {
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 63, 63, 0.5);
 }
 
-/* DaisyUI Input Styling for Ouija Board Theme */
-.theme-dark-gothic .input {
-    background: var(--bg-input, #000000);
-    border: 1px solid var(--border, #3a1a1a);
-    color: var(--text-main, #d4d4d4);
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9), 0 0 10px rgba(139, 0, 0, 0.2);
-    font-family: var(--font-body, 'Georgia', serif);
-}
-
-.theme-dark-gothic .input:focus {
-    border-color: var(--accent, #ff3f3f);
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 63, 63, 0.5);
-    outline: none;
-}
-
-.theme-dark-gothic .input::placeholder {
-    color: var(--text-dim, #666666);
-    opacity: 0.7;
-}
-
 /* Chat message styling with mystical effects */
 .theme-dark-gothic .chat-message-user {
     background: linear-gradient(135deg, var(--secondary, #2b0505) 0%, var(--primary, #8b0000) 100%);
@@ -1071,36 +997,6 @@ textarea {
     color: var(--text-main, #d4d4d4);
 }
 
-/* DaisyUI Chat Bubble Styling for Ouija Board Theme */
-.theme-dark-gothic .chat-bubble {
-    background: var(--bg-card, #110a0a);
-    border: 1px solid var(--border, #3a1a1a);
-    box-shadow: 0 0 20px rgba(139, 0, 0, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.7);
-    color: var(--text-main, #d4d4d4);
-    font-family: var(--font-body, 'Georgia', serif);
-}
-
-.theme-dark-gothic .chat-bubble-primary {
-    background: linear-gradient(135deg, var(--secondary, #2b0505) 0%, var(--primary, #8b0000) 100%);
-    border: 1px solid var(--border, #3a1a1a);
-    box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
-    color: var(--text-main, #d4d4d4);
-}
-
-.theme-dark-gothic .chat-bubble:hover {
-    box-shadow: 0 0 25px rgba(139, 0, 0, 0.3), inset 0 0 35px rgba(0, 0, 0, 0.8);
-}
-
-.theme-dark-gothic .chat-bubble-primary:hover {
-    box-shadow: 0 0 20px rgba(255, 63, 63, 0.4);
-}
-
-/* Chat footer (timestamp) styling for Ouija Board */
-.theme-dark-gothic .chat-footer {
-    color: var(--text-dim, #666666);
-    font-family: var(--font-mono, 'Courier New', monospace);
-}
-
 /* Glowing icon effects for dark gothic theme */
 .theme-dark-gothic .message-icon {
     filter: drop-shadow(0 0 5px var(--accent, #ff3f3f));
@@ -1117,20 +1013,7 @@ textarea {
 .theme-dark-gothic #chat-history {
     background: var(--bg-card, #110a0a);
     border: 1px solid var(--border, #3a1a1a);
-    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(139, 0, 0, 0.2);
-}
-
-/* Ensure DaisyUI card components have dark mystical styling */
-.theme-dark-gothic .card.bg-base-200 {
-    background: var(--bg-card, #110a0a);
-    border: 1px solid var(--border, #3a1a1a);
     box-shadow: 0 0 30px rgba(139, 0, 0, 0.3), inset 0 0 50px rgba(0, 0, 0, 0.8);
-}
-
-.theme-dark-gothic #chat-history.bg-base-100 {
-    background: var(--bg-card, #110a0a);
-    border: 1px solid var(--border, #3a1a1a);
-    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(139, 0, 0, 0.3), inset 0 0 50px rgba(0, 0, 0, 0.8);
 }
 
 /* Loading spinner with mystical glow */
@@ -1528,8 +1411,6 @@ textarea {
 
 /* ========================================
    SVG GOOEY FILTER BLOOD DRIP - Most Realistic
-   ⚠️ CUSTOM MYSTICAL EFFECT - CANNOT BE REPLICATED WITH TAILWIND/DAISYUI
-   This creates a realistic blood drip animation with gooey liquid physics
    ======================================== */
 
 /* Container with gooey filter - creates liquid merging effect */
@@ -1743,16 +1624,24 @@ textarea {
    ========================================== */
 
 .document-item {
-    /* Tailwind: transition-all duration-200 ease-in-out hover:translate-x-0.5 */
     transition: all 0.2s ease;
 }
 
 .document-item:hover {
-    /* Tailwind: hover:translate-x-0.5 */
     transform: translateX(2px);
 }
 
-/* Checkbox styling now handled by DaisyUI */
+.doc-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+}
+
+#select-all-docs {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+}
 
 /* Scrollbar styling for document list */
 #document-list::-webkit-scrollbar {
@@ -1771,75 +1660,6 @@ textarea {
 
 #document-list::-webkit-scrollbar-thumb:hover {
     background: var(--accent);
-}
-
-/* Ouija Board Theme - Document Library Mystical Styling */
-.theme-dark-gothic .document-item {
-    background: rgba(17, 10, 10, 0.6);
-    border: 1px solid var(--border, #3a1a1a);
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-.theme-dark-gothic .document-item:hover {
-    background: rgba(43, 5, 5, 0.8);
-    border-color: var(--primary, #8b0000);
-    box-shadow: 0 0 15px rgba(139, 0, 0, 0.3), inset 0 0 15px rgba(0, 0, 0, 0.6);
-    transform: translateX(3px);
-}
-
-/* Mystical glow on checkboxes */
-.theme-dark-gothic .checkbox {
-    border-color: var(--border, #3a1a1a);
-    background: var(--bg-input, #000000);
-}
-
-.theme-dark-gothic .checkbox:checked {
-    background: var(--primary, #8b0000);
-    border-color: var(--accent, #ff3f3f);
-    box-shadow: 0 0 10px rgba(255, 63, 63, 0.5);
-}
-
-.theme-dark-gothic .checkbox:hover {
-    border-color: var(--accent, #ff3f3f);
-    box-shadow: 0 0 8px rgba(255, 63, 63, 0.3);
-}
-
-/* Delete button mystical styling */
-.theme-dark-gothic .btn-ghost.text-error {
-    color: var(--accent, #ff3f3f);
-    transition: all 0.2s ease;
-}
-
-.theme-dark-gothic .btn-ghost.text-error:hover {
-    background: rgba(139, 0, 0, 0.2);
-    color: var(--accent, #ff3f3f);
-    box-shadow: 0 0 15px rgba(255, 63, 63, 0.4);
-    transform: scale(1.1);
-}
-
-/* Document list container mystical styling */
-.theme-dark-gothic #document-list {
-    background: var(--bg-card, #110a0a);
-    border: 1px solid var(--border, #3a1a1a);
-    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(139, 0, 0, 0.2);
-}
-
-/* Select all checkbox mystical styling */
-.theme-dark-gothic #select-all-docs {
-    border-color: var(--border, #3a1a1a);
-    background: var(--bg-input, #000000);
-}
-
-.theme-dark-gothic #select-all-docs:checked {
-    background: var(--primary, #8b0000);
-    border-color: var(--accent, #ff3f3f);
-    box-shadow: 0 0 10px rgba(255, 63, 63, 0.5);
-}
-
-.theme-dark-gothic #select-all-docs:indeterminate {
-    background: var(--secondary, #2b0505);
-    border-color: var(--primary, #8b0000);
-    box-shadow: 0 0 8px rgba(139, 0, 0, 0.4);
 }
 
 /* ==========================================
@@ -1952,7 +1772,6 @@ body:has(.modal-overlay) {
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
-    /* Tailwind: transition-all duration-300 ease-in-out hover:-translate-x-1 hover:shadow-lg hover:border-accent */
     transition: all 0.3s ease;
     z-index: 1000;
     box-shadow: var(--shadow-md);
@@ -1960,7 +1779,6 @@ body:has(.modal-overlay) {
 }
 
 .back-to-launcher-btn:hover {
-    /* Tailwind: hover:-translate-x-1 hover:shadow-lg hover:border-accent */
     transform: translateX(-5px);
     box-shadow: var(--shadow-lg);
     border-color: var(--accent);
@@ -1968,12 +1786,10 @@ body:has(.modal-overlay) {
 
 .back-arrow {
     font-size: 1.2rem;
-    /* Tailwind: transition-transform duration-300 ease-in-out */
     transition: transform 0.3s ease;
 }
 
 .back-to-launcher-btn:hover .back-arrow {
-    /* Tailwind: group-hover:-translate-x-0.5 */
     transform: translateX(-3px);
 }
 

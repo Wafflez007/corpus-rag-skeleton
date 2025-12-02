@@ -12,39 +12,6 @@
     {% endif %}
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- DaisyUI -->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
-    
-    <!-- Tailwind Configuration -->
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              'legal-navy': '#0f172a',
-              'legal-gold': '#ca8a04',
-              'legal-steel': '#334155',
-              'legal-slate': '#1e293b',
-              'legal-light': '#f8fafc',
-              'legal-input': '#f1f5f9',
-              'legal-border': '#e2e8f0',
-              'ghost-dark': '#050505',
-              'ghost-card': '#110a0a',
-              'ghost-border': '#3a1a1a',
-              'ghost-glow': '#ff3f3f',
-              'ghost-blood': '#8b0000',
-              'ghost-dried': '#2b0505',
-              'ghost-white': '#d4d4d4'
-            }
-          }
-        },
-        daisyui: {
-          themes: {{ daisyui_theme_config | tojson | safe }}
-        }
-      }
-    </script>
-    
     <!-- Google Fonts: 'Creepster' for Ghost, 'Playfair Display' for Lawyer -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -53,7 +20,7 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 theme-{{ theme }}" {% if daisyui_theme %}data-theme="{{ daisyui_theme }}"{% endif %}>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 theme-{{ theme }}">
 
     <!-- SVG Gooey Filter for Realistic Blood Effect -->
     <svg style="position:absolute;width:0;height:0" xmlns="http://www.w3.org/2000/svg">
@@ -122,126 +89,129 @@
     {% endif %}
 
     <!-- Back to Launcher Button -->
-    <a href="/" class="back-to-launcher-btn min-h-[44px] min-w-[44px]">
+    <a href="/" class="back-to-launcher-btn">
         <span class="back-arrow">←</span>
-        <span class="back-text hidden sm:inline">Back to Launcher</span>
-        <span class="back-text sm:hidden">Back</span>
+        <span class="back-text">Back to Launcher</span>
     </a>
 
     <!-- Header -->
-    <header class="w-full max-w-7xl text-center mb-4 md:mb-6 lg:mb-8 opacity-0 animate-[fade-in_0.8s_ease-out_forwards] motion-reduce:animate-none motion-reduce:opacity-100 px-2">
+    <header class="w-full max-w-7xl text-center mb-8 animate-fade-in">
         {% if theme == 'dark-gothic' %}
-        <h1 class="text-4xl sm:text-5xl md:text-6xl mb-2 md:mb-3 spooky-title" style="color: var(--accent);">
+        <h1 class="text-6xl mb-3 spooky-title" style="color: var(--accent);">
             {{ app_name }}
         </h1>
-        <p class="text-xs sm:text-sm tracking-[0.2em] md:tracking-[0.3em] opacity-70 uppercase">~ The Veil is Thin ~</p>
+        <p class="text-sm tracking-[0.3em] opacity-70 uppercase">~ The Veil is Thin ~</p>
         {% else %}
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 md:mb-3 tracking-tight" style="color: var(--primary);">
+        <h1 class="text-5xl font-bold mb-3 tracking-tight" style="color: var(--primary);">
             {{ app_name }}
         </h1>
-        <p class="text-xs sm:text-sm tracking-wide opacity-70 font-serif italic">Professional Document Analysis & Legal Research</p>
+        <p class="text-sm tracking-wide opacity-70 font-serif italic">Professional Document Analysis & Legal Research</p>
         {% endif %}
-        <div class="h-1 w-24 sm:w-32 mx-auto mt-4 md:mt-6 rounded-full" style="background: linear-gradient(90deg, transparent, var(--primary), transparent);"></div>
+        <div class="h-1 w-32 mx-auto mt-6 rounded-full" style="background: linear-gradient(90deg, transparent, var(--primary), transparent);"></div>
     </header>
 
     <!-- Main Container -->
-    <main class="w-full max-w-7xl backdrop-blur-sm transition-all duration-500 opacity-0 animate-[fade-in_0.8s_ease-out_0.2s_forwards] motion-reduce:animate-none motion-reduce:opacity-100 px-2 sm:px-4">
+    <main class="w-full max-w-7xl backdrop-blur-sm transition-all duration-500 animate-fade-in" 
+          style="animation-delay: 0.2s; opacity: 0;">
         
-        <!-- Upload Section (Full Width) - DaisyUI Card -->
-        <div id="upload-section" class="card bg-base-200 shadow-xl mb-4 md:mb-6">
-            <div class="card-body p-4 sm:p-6">
-                <h2 class="card-title text-lg sm:text-xl md:text-2xl mb-2">
-                    {% if theme == 'dark-gothic' %}
-                    <span class="animate-pulse">🔮</span> Summon Document
-                    {% else %}
-                    <span>📂</span> Case File Ingestion
-                    {% endif %}
-                </h2>
-                <div class="flex flex-col md:flex-row gap-3">
-                    <input type="file" id="fileInput" accept=".txt,.pdf" 
-                        class="file-input file-input-bordered flex-1 min-h-[44px]"
-                    />
-                    <button onclick="uploadFile()" class="btn btn-primary min-h-[44px] min-w-[44px] px-6 sm:px-8 font-bold tracking-wide whitespace-nowrap">
-                        {% if theme == 'dark-gothic' %}OFFER{% else %}UPLOAD{% endif %}
-                    </button>
-                </div>
-                <p id="upload-status" class="mt-3 text-xs font-mono tracking-wider opacity-0 transition-opacity duration-300"></p>
-                <div id="upload-progress-container" class="mt-3 hidden">
-                    <div class="flex justify-between text-xs mb-1">
-                        <span id="progress-label">Uploading...</span>
-                        <span id="progress-percent">0%</span>
-                    </div>
-                    <progress id="progress-bar" class="progress progress-primary w-full" value="0" max="100"></progress>
-                </div>
-                <div id="queue-status" class="hidden mt-2 text-sm"></div>
+        <!-- Upload Section (Full Width) -->
+        <div id="upload-section" class="mb-6 rounded-xl p-6 {% if theme == 'dark-gothic' %}ouija-border{% else %}legal-border professional-shadow{% endif %}" 
+             style="background-color: var(--bg-card); color: var(--text-main);">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-3" style="color: var(--primary);">
+                {% if theme == 'dark-gothic' %}
+                <span class="animate-pulse">🔮</span> Summon Document
+                {% else %}
+                <span>📂</span> Case File Ingestion
+                {% endif %}
+            </h2>
+            <div class="flex gap-3">
+                <input type="file" id="fileInput" accept=".txt,.pdf" 
+                    class="block w-full text-sm rounded-lg cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold transition-all"
+                    style="color: var(--text-main); background: var(--bg-input);"
+                />
+                <button onclick="uploadFile()" class="btn-primary px-8 py-3 rounded-lg font-bold tracking-wide whitespace-nowrap shadow-lg">
+                    {% if theme == 'dark-gothic' %}OFFER{% else %}UPLOAD{% endif %}
+                </button>
             </div>
+            <p id="upload-status" class="mt-3 text-xs font-mono tracking-wider opacity-0 transition-opacity duration-300"></p>
+            <div id="upload-progress-container" class="mt-3 hidden">
+                <div class="flex justify-between text-xs mb-1">
+                    <span id="progress-label">Uploading...</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="w-full h-2 rounded-full overflow-hidden" style="background: var(--bg-input);">
+                    <div id="progress-bar" class="h-full transition-all duration-300 rounded-full" style="width: 0%; background: var(--accent);"></div>
+                </div>
+            </div>
+            <div id="queue-status" style="display: none;"></div>
         </div>
 
-        <!-- Responsive Layout: Single column (mobile) -> Two columns (tablet) -> Three columns (desktop) -->
-        <!-- Mobile: 1 column, Tablet: 2 columns (library + chat side by side), Desktop: 3 columns (library takes 1, chat takes 2) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <!-- Two Column Layout: Document Library (Left) + Chat (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             <!-- Left Column: Document Library -->
-            <!-- Mobile: Full width, Tablet: 1 of 2 columns, Desktop: 1 of 3 columns -->
-            <div id="library-section" class="md:col-span-1 lg:col-span-1">
-                <div class="card bg-base-200 shadow-xl h-full">
-                    <div class="card-body p-4 sm:p-6">
-                        <h2 class="card-title text-base sm:text-lg mb-3 md:mb-4">
+            <div id="library-section" class="lg:col-span-1">
+                <div class="rounded-xl p-6 h-full {% if theme == 'dark-gothic' %}ouija-border{% else %}legal-border professional-shadow{% endif %}" 
+                     style="background-color: var(--bg-card); color: var(--text-main);">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold flex items-center gap-2" style="color: var(--primary);">
                             {% if theme == 'dark-gothic' %}
                             <span>📚</span> Summoned Texts
                             {% else %}
                             <span>📚</span> Library
                             {% endif %}
                         </h2>
-                        <div id="document-list" class="space-y-2 max-h-[300px] sm:max-h-[400px] md:max-h-[500px] overflow-y-auto rounded-lg p-2 sm:p-3 mb-3 bg-base-100 border border-base-300">
-                            <div class="text-center text-xs opacity-40 py-6 sm:py-8">
-                                {% if theme == 'dark-gothic' %}
-                                No spirits bound yet...
-                                {% else %}
-                                No documents uploaded yet
-                                {% endif %}
-                            </div>
+                    </div>
+                    <div id="document-list" class="space-y-2 max-h-[500px] overflow-y-auto rounded-lg p-3 mb-3" style="background: var(--bg-input); border: 1px solid var(--border);">
+                        <div class="text-center text-xs opacity-40 py-8">
+                            {% if theme == 'dark-gothic' %}
+                            No spirits bound yet...
+                            {% else %}
+                            No documents uploaded yet
+                            {% endif %}
                         </div>
-                        <div class="flex items-center gap-2 text-xs opacity-60">
-                            <input type="checkbox" id="select-all-docs" onchange="toggleAllDocuments()" class="checkbox min-h-[44px] min-w-[44px]">
-                            <label for="select-all-docs" class="cursor-pointer min-h-[44px] flex items-center">Select All</label>
-                            <span class="ml-auto" id="selection-count">0 selected</span>
-                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs opacity-60">
+                        <input type="checkbox" id="select-all-docs" onchange="toggleAllDocuments()" class="cursor-pointer">
+                        <label for="select-all-docs" class="cursor-pointer">Select All</label>
+                        <span class="ml-auto" id="selection-count">0 selected</span>
                     </div>
                 </div>
             </div>
 
             <!-- Right Column: Chat Section -->
-            <!-- Mobile: Full width, Tablet: 1 of 2 columns, Desktop: 2 of 3 columns -->
-            <div id="chat-section" class="md:col-span-1 lg:col-span-2">
-                <div class="card bg-base-200 shadow-xl h-full">
-                    <div class="card-body p-4 sm:p-6">
-                        <h2 class="card-title text-base sm:text-lg mb-3 md:mb-4">
+            <div id="chat-section" class="lg:col-span-2">
+                <div class="rounded-xl p-6 h-full {% if theme == 'dark-gothic' %}ouija-border{% else %}legal-border professional-shadow{% endif %}" 
+                     style="background-color: var(--bg-card); color: var(--text-main);">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-3" style="color: var(--primary);">
+                        {% if theme == 'dark-gothic' %}
+                        <span class="animate-pulse">💀</span> Commune with the Entity
+                        {% else %}
+                        <span>💬</span> Counsel Inquiry
+                        {% endif %}
+                    </h2>
+                    
+                    <div id="chat-history" class="h-[500px] overflow-y-auto mb-4 p-5 rounded-lg space-y-4 scroll-smooth" 
+                         style="background: var(--bg-input); border: 1px solid var(--border);">
+                        <div class="text-center text-xs uppercase tracking-widest opacity-40 pt-32">
                             {% if theme == 'dark-gothic' %}
-                            <span class="animate-pulse">💀</span> Commune with the Entity
+                            ... The void is listening ...
                             {% else %}
-                            <span>💬</span> Counsel Inquiry
+                            System Ready. Awaiting Input.
                             {% endif %}
-                        </h2>
-                        
-                        <div id="chat-history" class="h-[300px] sm:h-[400px] md:h-[500px] overflow-y-auto mb-3 md:mb-4 p-3 sm:p-4 md:p-5 rounded-lg space-y-3 sm:space-y-4 scroll-smooth bg-base-100 border border-base-300">
-                            <div class="text-center text-xs uppercase tracking-widest opacity-40 pt-20 sm:pt-28 md:pt-32">
-                                {% if theme == 'dark-gothic' %}
-                                ... The void is listening ...
-                                {% else %}
-                                System Ready. Awaiting Input.
-                                {% endif %}
-                            </div>
                         </div>
-                        
-                        <div class="flex flex-col md:flex-row gap-3">
-                            <input type="text" id="queryInput" 
-                                placeholder="{% if theme == 'dark-gothic' %}Ask the spirit...{% else %}Enter your query here...{% endif %}" 
-                                class="input input-bordered flex-1 min-h-[44px]">
-                            <button onclick="sendQuery()" class="btn btn-primary min-h-[44px] min-w-[44px] px-6 sm:px-8 font-bold tracking-wide whitespace-nowrap">
-                                {% if theme == 'dark-gothic' %}INVOKE{% else %}SEND{% endif %}
-                            </button>
-                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3">
+                        <input type="text" id="queryInput" 
+                            placeholder="{% if theme == 'dark-gothic' %}Ask the spirit...{% else %}Enter your query here...{% endif %}" 
+                            class="w-full p-4 rounded-lg outline-none transition-all shadow-inner"
+                            style="background: var(--bg-main); border: 1px solid var(--border); color: var(--text-main);"
+                            onfocus="this.style.borderColor='var(--accent)'"
+                            onblur="this.style.borderColor='var(--border)'">
+                        <button onclick="sendQuery()" class="btn-primary px-8 py-4 rounded-lg font-bold tracking-wide whitespace-nowrap shadow-lg">
+                            {% if theme == 'dark-gothic' %}INVOKE{% else %}SEND{% endif %}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -251,7 +221,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="mt-4 md:mt-6 lg:mt-8 text-xs opacity-0 tracking-widest uppercase animate-[fade-in_0.8s_ease-out_0.4s_forwards] motion-reduce:animate-none motion-reduce:opacity-30 px-2">
+    <footer class="mt-8 text-xs opacity-30 tracking-widest uppercase animate-fade-in" style="animation-delay: 0.4s; opacity: 0;">
         Powered by {{ model_name if model_name else 'Gemini AI' }}
     </footer>
 
@@ -281,7 +251,7 @@
 
     <!-- Mute Toggle Button (Fixed Position) -->
     <button id="sound-toggle" 
-            class="fixed bottom-4 right-4 p-3 rounded-full transition-all z-50 shadow-lg hover:scale-110 min-h-[44px] min-w-[44px] flex items-center justify-center"
+            class="fixed bottom-4 right-4 p-3 rounded-full transition-all z-50 shadow-lg hover:scale-110"
             style="background: rgba(0, 0, 0, 0.2); color: white; backdrop-filter: blur(10px);"
             aria-label="Toggle sound"
             title="Toggle sound">
